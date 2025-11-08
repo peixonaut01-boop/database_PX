@@ -2,13 +2,12 @@ name: Update IBGE CNT Data
 
 on:
   schedule:
-    # Run at 9:00 AM BRT (12:00 UTC) on days 1-5 of months 3, 6, 9, 12
+    # Run at 9:00 AM BRT (12:00 UTC) on days 1-4 of months 3, 6, 9, 12
     # Brazilian Time (BRT) is UTC-3
     # 9:00 AM BRT = 12:00 PM UTC
     # Months: 3 (March), 6 (June), 9 (September), 12 (December)
-    # Days: 1, 2, 3, 4, 5
-    # Runs three times: 9:00:03, 9:00:30, and 9:01 AM BRT
-    - cron: '0 12 1-5 3,6,9,12 *'
+    # Days: 1, 2, 3, 4
+    - cron: '0 12 1-4 3,6,9,12 *'
   workflow_dispatch: # Allow manual triggering
 
 jobs:
@@ -30,27 +29,20 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         
-    - name: First Run - Update all IBGE tables (9:00:03 BRT)
+    - name: First Run - Update all IBGE tables (≈9:00:10 BRT)
       run: |
-        echo "=== First Run: Updating IBGE data at 9:00:03 AM BRT ==="
-        sleep 3
+        echo "=== First Run: Updating IBGE data at ~9:00:10 AM BRT ==="
+        sleep 10
         cd "scripts to pull data"
         python run_all_tables.py
-        
-    - name: Second Run - Update all IBGE tables (9:00:30 BRT)
+
+    - name: Second Run - Update all IBGE tables (≈9:01:00 BRT)
       run: |
-        echo "=== Second Run: Updating IBGE data at 9:00:30 AM BRT ==="
-        sleep 27
+        echo "=== Second Run: Updating IBGE data at ~9:01:00 AM BRT ==="
+        sleep 60
         cd "scripts to pull data"
         python run_all_tables.py
-        
-    - name: Third Run - Update all IBGE tables (9:01 BRT)
-      run: |
-        echo "=== Third Run: Updating IBGE data at 9:01 AM BRT ==="
-        sleep 30
-        cd "scripts to pull data"
-        python run_all_tables.py
-        
+
     - name: Verify data update
       run: |
         cd "scripts to pull data"

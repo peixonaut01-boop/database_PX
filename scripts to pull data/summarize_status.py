@@ -16,6 +16,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 WORKFLOW_FILES = [
     '.github/workflows/update_ibge_cnt.yaml',
     '.github/workflows/update_ibge_pms.yaml',
+    '.github/workflows/update_ibge_pmc.yaml',
     '.github/workflows/test_single_table.yaml',
 ]
 OUTPUT_FILE = REPO_ROOT / 'status_summary.txt'

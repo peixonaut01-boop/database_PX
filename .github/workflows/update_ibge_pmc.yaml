@@ -1,18 +1,18 @@
-name: Update IBGE PMS Data
+name: Update IBGE PMC Data
 
 on:
   schedule:
-    # Run at 9:00 AM BRT (12:00 UTC) on days 11-13 every month
+    # Run at 9:00 AM BRT (12:00 UTC) on days 12-14 every month
     # Brazilian Time (BRT) is UTC-3
     # 9:00 AM BRT = 12:00 PM UTC
-    # Days: 11, 12, 13 to cover the PMS release window
-    - cron: '0 12 11-13 * *'
+    # Days: 12, 13, 14 to cover the PMC release window
+    - cron: '0 12 12-14 * *'
   workflow_dispatch: # Allow manual triggering
 
 jobs:
-  update-ibge-pms:
+  update-ibge-pmc:
     runs-on: ubuntu-latest
-    name: Update IBGE PMS Data (3 runs)
+    name: Update IBGE PMC Data (2 runs)
 
     steps:
     - name: Checkout repository
@@ -28,21 +28,22 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: First Run - Update PMS data (≈9:00:10 BRT)
+    - name: First Run - Update PMC data (≈9:00:10 BRT)
       run: |
-        echo "=== First Run: Updating PMS data at ~9:00:10 AM BRT ==="
+        echo "=== First Run: Updating PMC data at ~9:00:10 AM BRT ==="
         sleep 10
         cd "scripts to pull data"
-        python run_all_pms.py
+        python run_all_pmc.py
 
-    - name: Second Run - Update PMS data (≈9:01:00 BRT)
+    - name: Second Run - Update PMC data (≈9:01:00 BRT)
       run: |
-        echo "=== Second Run: Updating PMS data at ~9:01:00 AM BRT ==="
+        echo "=== Second Run: Updating PMC data at ~9:01:00 AM BRT ==="
         sleep 60
         cd "scripts to pull data"
-        python run_all_pms.py
+        python run_all_pmc.py
 
-    - name: Verify PMS data upload
+    - name: Verify PMC data upload
       run: |
         cd "scripts to pull data"
-        python verify_pms_structure.py
+        python verify_structure.py
+
