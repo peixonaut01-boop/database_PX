@@ -85,7 +85,7 @@ def analyze_entries(entries: Any) -> Dict[str, Any]:
         if entries:
             last_entry = entries[-1]
             if isinstance(last_entry, dict):
-                for key in ('Trimestre', 'Periodo', 'Período', 'periodo'):
+                for key in ('Trimestre', 'Periodo', 'Período', 'periodo', 'period'):
                     if key in last_entry:
                         info['last_period'] = last_entry[key]
                         break
