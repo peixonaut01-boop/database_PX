@@ -9,6 +9,12 @@ import sys
 
 PMC_SCRIPTS = [
     'ibge_8190.py',
+    'ibge_8757.py',
+    'ibge_8880.py',
+    'ibge_8881.py',
+    'ibge_8882.py',
+    'ibge_8883.py',
+    'ibge_8884.py',
 ]
 
 

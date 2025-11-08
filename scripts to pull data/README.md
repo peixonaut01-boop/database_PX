@@ -101,8 +101,44 @@ For multi-sheet tables, each sheet is uploaded with the format: `[Table Name] - 
 1. **Table 8190 (Receita & Volume)** - `ibge_8190.py`
    - **Name:** Índices de volume e de receita nominal de atacado especializado em produtos alimentícios, bebidas e fumo (2022 = 100)
    - **Period:** janeiro 2022 a agosto 2025
-   - **Subbranches:** `receita` and `volume`, each with 4 sheets (índice, variações, acumulados)
+   - **Subbranches:** `receita` and `volume`, each with 4 sheets (índice, variações mensais, acumulados)
    - **Firebase Path:** `ibge_data/pmc/table_8190/{receita|volume}`
+
+2. **Table 8757 (Receita & Volume)** - `ibge_8757.py`
+   - **Name:** Índice e variação da receita nominal e do volume de vendas de materiais de construção (2022 = 100)
+   - **Period:** janeiro 2003 a agosto 2025
+   - **Subbranches:** `receita` and `volume`, 4 sheets cada
+   - **Firebase Path:** `ibge_data/pmc/table_8757/{receita|volume}`
+
+3. **Table 8880 (Receita & Volume)** - `ibge_8880.py`
+   - **Name:** Índice e variação da receita nominal e do volume de vendas no comércio varejista (2022 = 100)
+  - **Period:** janeiro 2000 a agosto 2025
+   - **Subbranches:** `receita` and `volume`
+   - **Firebase Path:** `ibge_data/pmc/table_8880/{receita|volume}`
+
+4. **Table 8881 (Receita & Volume)** - `ibge_8881.py`
+   - **Name:** Índice e variação da receita nominal e do volume de vendas no comércio varejista ampliado (2022 = 100)
+   - **Period:** janeiro 2000 a agosto 2025
+   - **Subbranches:** `receita` and `volume`
+   - **Firebase Path:** `ibge_data/pmc/table_8881/{receita|volume}`
+
+5. **Table 8882 (Receita & Volume, Activities)** - `ibge_8882.py`
+   - **Name:** Índice e variação da receita nominal e do volume de vendas no comércio varejista, por atividades (2022 = 100)
+   - **Period:** janeiro 2000 a agosto 2025
+   - **Subbranches:** `receita` and `volume`, 6 sheets with 11 activity categories
+   - **Firebase Path:** `ibge_data/pmc/table_8882/{receita|volume}`
+
+6. **Table 8883 (Receita & Volume, Activities)** - `ibge_8883.py`
+   - **Name:** Índice e variação da receita nominal e do volume de vendas no comércio varejista ampliado, por atividades (2022 = 100)
+   - **Period:** janeiro 2000 a agosto 2025
+   - **Subbranches:** `receita` and `volume`, 6 sheets com categorias ampliadas
+   - **Firebase Path:** `ibge_data/pmc/table_8883/{receita|volume}`
+
+7. **Table 8884 (Receita & Volume)** - `ibge_8884.py`
+   - **Name:** Índice e variação da receita nominal e do volume de vendas de veículos, motocicletas, partes e peças (2022 = 100)
+   - **Period:** janeiro 2000 a agosto 2025
+   - **Subbranches:** `receita` and `volume`
+   - **Firebase Path:** `ibge_data/pmc/table_8884/{receita|volume}`
 
 ### Current Status:
 

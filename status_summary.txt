@@ -142,5 +142,119 @@ Category: PMC
         - PMC_-_Variação_acumulada_em: records=21 last=agosto 2025
         - PMC_-_Variação_acumulada_no: records=32 last=agosto 2025
         - PMC_-_Variação_mês_mesmo_mês: records=32 last=agosto 2025
+  table_8757:
+    table_8757/receita: PMC - Índice e variação da receita nominal e do volume de vendas de materiais de construção (2022 = 100) - Receita (nº8757)
+      period: janeiro 2003 a agosto 2025
+      sheets: 6
+        - PMC_-_Número-índice_(2022=10: records=272 last=agosto 2025
+        - PMC_-_Número-índice_com_ajus: records=272 last=agosto 2025
+        - PMC_-_Variação_acumulada_em: records=249 last=agosto 2025
+        - PMC_-_Variação_acumulada_no: records=260 last=agosto 2025
+        - PMC_-_Variação_mês_mesmo_mês: records=260 last=agosto 2025
+        - PMC_-_Variação_mês_mês_imedi: records=271 last=agosto 2025
+    table_8757/volume: PMC - Índice e variação do volume de vendas de materiais de construção (2022 = 100) - Volume (nº8757)
+      period: janeiro 2003 a agosto 2025
+      sheets: 6
+        - PMC_-_Número-índice_(2022=10: records=272 last=agosto 2025
+        - PMC_-_Número-índice_com_ajus: records=272 last=agosto 2025
+        - PMC_-_Variação_acumulada_em: records=249 last=agosto 2025
+        - PMC_-_Variação_acumulada_no: records=260 last=agosto 2025
+        - PMC_-_Variação_mês_mesmo_mês: records=260 last=agosto 2025
+        - PMC_-_Variação_mês_mês_imedi: records=271 last=agosto 2025
+  table_8880:
+    table_8880/receita: PMC - Índice e variação da receita nominal e do volume de vendas no comércio varejista (2022 = 100) - Receita (nº8880)
+      period: janeiro 2000 a agosto 2025
+      sheets: 6
+        - PMC_-_Número-índice_(2022=10: records=308 last=agosto 2025
+        - PMC_-_Número-índice_com_ajus: records=308 last=agosto 2025
+        - PMC_-_Variação_acumulada_em: records=285 last=agosto 2025
+        - PMC_-_Variação_acumulada_no: records=296 last=agosto 2025
+        - PMC_-_Variação_mês_mesmo_mês: records=296 last=agosto 2025
+        - PMC_-_Variação_mês_mês_imedi: records=307 last=agosto 2025
+    table_8880/volume: PMC - Índice e variação do volume de vendas no comércio varejista (2022 = 100) - Volume (nº8880)
+      period: janeiro 2000 a agosto 2025
+      sheets: 6
+        - PMC_-_Número-índice_(2022=10: records=308 last=agosto 2025
+        - PMC_-_Número-índice_com_ajus: records=308 last=agosto 2025
+        - PMC_-_Variação_acumulada_em: records=285 last=agosto 2025
+        - PMC_-_Variação_acumulada_no: records=296 last=agosto 2025
+        - PMC_-_Variação_mês_mesmo_mês: records=296 last=agosto 2025
+        - PMC_-_Variação_mês_mês_imedi: records=307 last=agosto 2025
+  table_8881:
+    table_8881/receita: PMC - Índice e variação da receita nominal e do volume de vendas no comércio varejista ampliado (2022 = 100) - Receita (nº8881)
+      period: janeiro 2000 a agosto 2025
+      sheets: 6
+        - PMC_-_Número-índice_(2022=10: records=272 last=agosto 2025
+        - PMC_-_Número-índice_com_ajus: records=272 last=agosto 2025
+        - PMC_-_Variação_acumulada_em: records=249 last=agosto 2025
+        - PMC_-_Variação_acumulada_no: records=260 last=agosto 2025
+        - PMC_-_Variação_mês_mesmo_mês: records=260 last=agosto 2025
+        - PMC_-_Variação_mês_mês_imedi: records=271 last=agosto 2025
+    table_8881/volume: PMC - Índice e variação do volume de vendas no comércio varejista ampliado (2022 = 100) - Volume (nº8881)
+      period: janeiro 2000 a agosto 2025
+      sheets: 6
+        - PMC_-_Número-índice_(2022=10: records=272 last=agosto 2025
+        - PMC_-_Número-índice_com_ajus: records=272 last=agosto 2025
+        - PMC_-_Variação_acumulada_em: records=249 last=agosto 2025
+        - PMC_-_Variação_acumulada_no: records=260 last=agosto 2025
+        - PMC_-_Variação_mês_mesmo_mês: records=260 last=agosto 2025
+        - PMC_-_Variação_mês_mês_imedi: records=271 last=agosto 2025
+  table_8882:
+    table_8882/receita: PMC - Índice e variação da receita nominal e do volume de vendas no comércio varejista, por atividades (2022 = 100) - Receita (nº8882)
+      period: janeiro 2000 a agosto 2025
+      sheets: 6
+        - PMC_-_Número-índice_(2022=10: records=2980 last=agosto 2025
+        - PMC_-_Número-índice_com_ajus: records=2628 last=agosto 2025
+        - PMC_-_Variação_acumulada_em: records=2727 last=agosto 2025
+        - PMC_-_Variação_acumulada_no: records=2848 last=agosto 2025
+        - PMC_-_Variação_mês_mesmo_mês: records=2848 last=agosto 2025
+        - PMC_-_Variação_mês_mês_imedi: records=2619 last=agosto 2025
+    table_8882/volume: PMC - Índice e variação do volume de vendas no comércio varejista, por atividades (2022 = 100) - Volume (nº8882)
+      period: janeiro 2000 a agosto 2025
+      sheets: 6
+        - PMC_-_Número-índice_(2022=10: records=2980 last=agosto 2025
+        - PMC_-_Número-índice_com_ajus: records=2628 last=agosto 2025
+        - PMC_-_Variação_acumulada_em: records=2727 last=agosto 2025
+        - PMC_-_Variação_acumulada_no: records=2848 last=agosto 2025
+        - PMC_-_Variação_mês_mesmo_mês: records=2848 last=agosto 2025
+        - PMC_-_Variação_mês_mês_imedi: records=2619 last=agosto 2025
+  table_8883:
+    table_8883/receita: PMC - Índice e variação da receita nominal e do volume de vendas no comércio varejista ampliado, por atividades (2022 = 100) - Receita (nº8883)
+      period: janeiro 2000 a agosto 2025
+      sheets: 6
+        - PMC_-_Número-índice_(2022=10: records=3604 last=agosto 2025
+        - PMC_-_Número-índice_com_ajus: records=3208 last=agosto 2025
+        - PMC_-_Variação_acumulada_em: records=3282 last=agosto 2025
+        - PMC_-_Variação_acumulada_no: records=3436 last=agosto 2025
+        - PMC_-_Variação_mês_mesmo_mês: records=3436 last=agosto 2025
+        - PMC_-_Variação_mês_mês_imedi: records=3197 last=agosto 2025
+    table_8883/volume: PMC - Índice e variação do volume de vendas no comércio varejista ampliado, por atividades (2022 = 100) - Volume (nº8883)
+      period: janeiro 2000 a agosto 2025
+      sheets: 6
+        - PMC_-_Número-índice_(2022=10: records=3604 last=agosto 2025
+        - PMC_-_Número-índice_com_ajus: records=3208 last=agosto 2025
+        - PMC_-_Variação_acumulada_em: records=3282 last=agosto 2025
+        - PMC_-_Variação_acumulada_no: records=3436 last=agosto 2025
+        - PMC_-_Variação_mês_mesmo_mês: records=3436 last=agosto 2025
+        - PMC_-_Variação_mês_mês_imedi: records=3197 last=agosto 2025
+  table_8884:
+    table_8884/receita: PMC - Índice e variação da receita nominal e do volume de vendas de veículos, motocicletas, partes e peças (2022 = 100) - Receita (nº8884)
+      period: janeiro 2000 a agosto 2025
+      sheets: 6
+        - PMC_-_Número-índice_(2022=10: records=308 last=agosto 2025
+        - PMC_-_Número-índice_com_ajus: records=308 last=agosto 2025
+        - PMC_-_Variação_acumulada_em: records=285 last=agosto 2025
+        - PMC_-_Variação_acumulada_no: records=296 last=agosto 2025
+        - PMC_-_Variação_mês_mesmo_mês: records=296 last=agosto 2025
+        - PMC_-_Variação_mês_mês_imedi: records=307 last=agosto 2025
+    table_8884/volume: PMC - Índice e variação do volume de vendas de veículos, motocicletas, partes e peças (2022 = 100) - Volume (nº8884)
+      period: janeiro 2000 a agosto 2025
+      sheets: 6
+        - PMC_-_Número-índice_(2022=10: records=308 last=agosto 2025
+        - PMC_-_Número-índice_com_ajus: records=308 last=agosto 2025
+        - PMC_-_Variação_acumulada_em: records=285 last=agosto 2025
+        - PMC_-_Variação_acumulada_no: records=296 last=agosto 2025
+        - PMC_-_Variação_mês_mesmo_mês: records=296 last=agosto 2025
+        - PMC_-_Variação_mês_mês_imedi: records=307 last=agosto 2025
 
-Report generated at 2025-11-08 19:41 UTC
+Report generated at 2025-11-08 20:07 UTC
