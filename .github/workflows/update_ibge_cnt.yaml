@@ -7,13 +7,14 @@ on:
     # 9:00 AM BRT = 12:00 PM UTC
     # Months: 3 (March), 6 (June), 9 (September), 12 (December)
     # Days: 1, 2, 3, 4, 5
+    # Runs three times: 9:00:03, 9:00:30, and 9:01 AM BRT
     - cron: '0 12 1-5 3,6,9,12 *'
   workflow_dispatch: # Allow manual triggering
 
 jobs:
   update-ibge-data:
     runs-on: ubuntu-latest
-    name: Update IBGE CNT Series Data
+    name: Update IBGE CNT Series Data (3 runs)
     
     steps:
     - name: Checkout repository
@@ -29,26 +30,24 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         
-    - name: Setup and wait for first run (9:00:30 BRT)
+    - name: First Run - Update all IBGE tables (9:00:03 BRT)
       run: |
-        echo "Workflow started at 9:00 AM BRT"
-        echo "Waiting 30 seconds for first run at 9:00:30 AM BRT..."
-        sleep 30
-        
-    - name: First Run - Update all IBGE tables (9:00:30 BRT)
-      run: |
-        echo "=== First Run: Updating IBGE data at 9:00:30 AM BRT ==="
+        echo "=== First Run: Updating IBGE data at 9:00:03 AM BRT ==="
+        sleep 3
         cd "scripts to pull data"
         python run_all_tables.py
         
-    - name: Wait for second run (9:01 BRT)
+    - name: Second Run - Update all IBGE tables (9:00:30 BRT)
       run: |
-        echo "Waiting 30 seconds for second run at 9:01 AM BRT..."
-        sleep 30
+        echo "=== Second Run: Updating IBGE data at 9:00:30 AM BRT ==="
+        sleep 27
+        cd "scripts to pull data"
+        python run_all_tables.py
         
-    - name: Second Run - Update all IBGE tables (9:01 BRT)
+    - name: Third Run - Update all IBGE tables (9:01 BRT)
       run: |
-        echo "=== Second Run: Updating IBGE data at 9:01 AM BRT ==="
+        echo "=== Third Run: Updating IBGE data at 9:01 AM BRT ==="
+        sleep 30
         cd "scripts to pull data"
         python run_all_tables.py
         
