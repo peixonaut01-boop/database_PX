@@ -1,17 +1,17 @@
 """
-Script to fetch IBGE Table 1620: Série encadeada do índice de volume trimestral (Base: média 1995 = 100)
+Script to fetch IBGE Table 6726: Taxa de poupança
 """
 from ibge_base import fetch_ibge_data, clean_and_structure_data, upload_table_data
 
 # --- Configuration ---
 
-# IBGE URL for the XLSX data (Table 1620)
-IBGE_URL = 'https://sidra.ibge.gov.br/geratabela?format=xlsx&name=tabela1620.xlsx&terr=N&rank=-&query=t/1620/n1/all/v/all/p/all/c11255/all/d/v583%202/l/,v%2Bc11255,t%2Bp'
+# IBGE URL for the XLSX data (Table 6726)
+IBGE_URL = 'https://sidra.ibge.gov.br/geratabela?format=xlsx&name=tabela6726.xlsx&terr=N&rank=-&query=t/6726/n1/all/v/all/p/all/d/v9774%201/l/v,,t%2Bp'
 
 # Table configuration
-TABLE_NUMBER = 1620
-TABLE_NAME = 'Série encadeada do índice de volume trimestral (Base: média 1995 = 100) (nº1620)'
-PERIOD_RANGE = '1º trimestre 1996 a 2º trimestre 2025'
+TABLE_NUMBER = 6726
+TABLE_NAME = 'Taxa de poupança (nº6726)'
+PERIOD_RANGE = '1º trimestre 2000 a 2º trimestre 2025'
 
 # --- Data Fetching, Processing, and Upload ---
 
@@ -19,7 +19,7 @@ def fetch_and_upload_ibge_data():
     """
     Fetches the XLSX data, cleans it, and uploads it to Firebase.
     """
-    print("1. Fetching data from IBGE (Table 1620)...")
+    print("1. Fetching data from IBGE (Table 6726)...")
     try:
         # Fetch and process data
         df, sector_names = fetch_ibge_data(IBGE_URL)
@@ -43,3 +43,4 @@ def fetch_and_upload_ibge_data():
 
 if __name__ == "__main__":
     fetch_and_upload_ibge_data()
+
