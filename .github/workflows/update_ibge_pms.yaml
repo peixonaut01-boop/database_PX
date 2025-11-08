@@ -1,18 +1,12 @@
 name: Update IBGE PMS Data
 
 on:
-  schedule:
-    # Run at 9:00 AM BRT (12:00 UTC) on days 11-13 every month
-    # Brazilian Time (BRT) is UTC-3
-    # 9:00 AM BRT = 12:00 PM UTC
-    # Days: 11, 12, 13 to cover the PMS release window
-    - cron: '0 12 11-13 * *'
-  workflow_dispatch: # Allow manual triggering
+  workflow_dispatch:
 
 jobs:
   update-ibge-pms:
     runs-on: ubuntu-latest
-    name: Update IBGE PMS Data (3 runs)
+    name: Update IBGE PMS Data (manual trigger)
 
     steps:
     - name: Checkout repository
@@ -28,17 +22,15 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: First Run - Update PMS data (≈9:00:10 BRT)
+    - name: First Run - Update PMS data
       run: |
-        echo "=== First Run: Updating PMS data at ~9:00:10 AM BRT ==="
-        sleep 10
+        echo "=== First Run: Updating PMS data ==="
         cd "scripts to pull data"
         python run_all_pms.py
 
-    - name: Second Run - Update PMS data (≈9:01:00 BRT)
+    - name: Second Run - Update PMS data (retry)
       run: |
-        echo "=== Second Run: Updating PMS data at ~9:01:00 AM BRT ==="
-        sleep 60
+        echo "=== Second Run: Updating PMS data (retry) ==="
         cd "scripts to pull data"
         python run_all_pms.py
 

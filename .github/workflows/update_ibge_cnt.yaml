@@ -1,50 +1,44 @@
 name: Update IBGE CNT Data
-
-on:
-  schedule:
-    # Run at 9:00 AM BRT (12:00 UTC) on days 1-4 of months 3, 6, 9, 12
-    # Brazilian Time (BRT) is UTC-3
-    # 9:00 AM BRT = 12:00 PM UTC
-    # Months: 3 (March), 6 (June), 9 (September), 12 (December)
-    # Days: 1, 2, 3, 4
-    - cron: '0 12 1-4 3,6,9,12 *'
-  workflow_dispatch: # Allow manual triggering
-
+true:
+  workflow_dispatch: null
 jobs:
   update-ibge-data:
     runs-on: ubuntu-latest
-    name: Update IBGE CNT Series Data (3 runs)
-    
+    name: Update IBGE CNT Series Data (manual trigger)
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-      
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
         python-version: '3.11'
-        
     - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
+      run: 'python -m pip install --upgrade pip
+
         pip install -r requirements.txt
-        
-    - name: First Run - Update all IBGE tables (≈9:00:10 BRT)
-      run: |
-        echo "=== First Run: Updating IBGE data at ~9:00:10 AM BRT ==="
-        sleep 10
+
+        '
+    - name: First Run - Update all IBGE tables
+      run: 'echo "=== First Run: Updating IBGE data ==="
+
         cd "scripts to pull data"
+
         python run_all_tables.py
 
-    - name: Second Run - Update all IBGE tables (≈9:01:00 BRT)
-      run: |
-        echo "=== Second Run: Updating IBGE data at ~9:01:00 AM BRT ==="
-        sleep 60
+        '
+    - name: Second Run - Update all IBGE tables (retry)
+      run: 'echo "=== Second Run: Updating IBGE data (retry) ==="
+
         cd "scripts to pull data"
+
         python run_all_tables.py
 
+        '
     - name: Verify data update
-      run: |
-        cd "scripts to pull data"
+      run: 'cd "scripts to pull data"
+
         python verify_structure.py
 
+        '
+'on':
+  workflow_dispatch: {}

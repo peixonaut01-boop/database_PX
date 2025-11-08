@@ -1,16 +1,16 @@
 === Workflow Status ===
 Workflow: Update IBGE CNT Data (update_ibge_cnt.yaml)
-  Schedule: 0 12 1-4 3,6,9,12 *
+  Schedule: none
   Manual trigger: yes
   Last run: unavailable
 
 Workflow: Update IBGE PMS Data (update_ibge_pms.yaml)
-  Schedule: 0 12 11-13 * *
+  Schedule: none
   Manual trigger: yes
   Last run: unavailable
 
 Workflow: Update IBGE PMC Data (update_ibge_pmc.yaml)
-  Schedule: 0 12 12-14 * *
+  Schedule: none
   Manual trigger: yes
   Last run: unavailable
 
@@ -262,4 +262,4 @@ Category: PMC
         - PMC_-_Variação_mês_mesmo_mês: records=296 last=agosto 2025
         - PMC_-_Variação_mês_mês_imedi: records=307 last=agosto 2025
 
-Report generated at 2025-11-08 20:54 UTC
+Report generated at 2025-11-08 21:13 UTC

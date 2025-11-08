@@ -1,18 +1,12 @@
 name: Update IBGE PMC Data
 
 on:
-  schedule:
-    # Run at 9:00 AM BRT (12:00 UTC) on days 12-14 every month
-    # Brazilian Time (BRT) is UTC-3
-    # 9:00 AM BRT = 12:00 PM UTC
-    # Days: 12, 13, 14 to cover the PMC release window
-    - cron: '0 12 12-14 * *'
-  workflow_dispatch: # Allow manual triggering
+  workflow_dispatch:
 
 jobs:
   update-ibge-pmc:
     runs-on: ubuntu-latest
-    name: Update IBGE PMC Data (2 runs)
+    name: Update IBGE PMC Data (manual trigger)
 
     steps:
     - name: Checkout repository
@@ -28,17 +22,15 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: First Run - Update PMC data (≈9:00:10 BRT)
+    - name: First Run - Update PMC data
       run: |
-        echo "=== First Run: Updating PMC data at ~9:00:10 AM BRT ==="
-        sleep 10
+        echo "=== First Run: Updating PMC data ==="
         cd "scripts to pull data"
         python run_all_pmc.py
 
-    - name: Second Run - Update PMC data (≈9:01:00 BRT)
+    - name: Second Run - Update PMC data (retry)
       run: |
-        echo "=== Second Run: Updating PMC data at ~9:01:00 AM BRT ==="
-        sleep 60
+        echo "=== Second Run: Updating PMC data (retry) ==="
         cd "scripts to pull data"
         python run_all_pmc.py
 
