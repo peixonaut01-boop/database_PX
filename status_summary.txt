@@ -1,0 +1,91 @@
+=== Workflow Status ===
+Workflow: Update IBGE CNT Data (update_ibge_cnt.yaml)
+  Schedule: 0 12 1-5 3,6,9,12 *
+  Manual trigger: yes
+  Last run: unavailable
+
+Workflow: Update IBGE PMS Data (update_ibge_pms.yaml)
+  Schedule: 0 12 10-15 * *
+  Manual trigger: yes
+  Last run: unavailable
+
+Workflow: Test Single IBGE Table (test_single_table.yaml)
+  Schedule: none
+  Manual trigger: yes
+  Last run: unavailable
+
+=== Firebase Data Summary ===
+Category: CNT
+  table_1620: Série encadeada do índice de volume trimestral (Base: média 1995 = 100) (nº1620)
+    period: 1º trimestre 1996 a 2º trimestre 2025
+    records: 118
+    last entry: 2º trimestre 2025
+  table_1621: Série encadeada do índice de volume trimestral com ajuste sazonal (Base: média 1995 = 100) (nº1621)
+    period: 1º trimestre 1996 a 2º trimestre 2025
+    records: 118
+    last entry: 2º trimestre 2025
+  table_1846: Valores a preços correntes (nº1846)
+    period: 1º trimestre 1996 a 2º trimestre 2025
+    records: 118
+    last entry: 2º trimestre 2025
+  table_2072: Contas econômicas trimestrais (nº2072)
+    period: 1º trimestre 2000 a 2º trimestre 2025
+    sheets: 12
+      - (+)_Cessão_de_ativos_não_fin: records=101 last=2º trimestre 2025
+      - (+)_Outras_transferências_co: records=101 last=2º trimestre 2025
+      - (+)_Rendas_de_propriedade_(l: records=101 last=2º trimestre 2025
+      - (+)_Salários_(líquidos_receb: records=101 last=2º trimestre 2025
+      - (+)_Transferências_de_capita: records=101 last=2º trimestre 2025
+      - (-)_Despesa_de_consumo_final: records=101 last=2º trimestre 2025
+      - (-)_Formação_bruta_de_capita: records=101 last=2º trimestre 2025
+      - (=)_Capacidade_necessidade: records=101 last=2º trimestre 2025
+      - (=)_Poupança_bruta_(Milhões: records=101 last=2º trimestre 2025
+      - (=)_Renda_nacional_bruta_(Mi: records=101 last=2º trimestre 2025
+      - (=)_Renda_nacional_disponíve: records=101 last=2º trimestre 2025
+      - Produto_Interno_Bruto_(Milhõ: records=101 last=2º trimestre 2025
+  table_5932: Taxa de variação do índice de volume trimestral (nº5932)
+    period: 1º trimestre 1996 a 2º trimestre 2025
+    sheets: 4
+      - Taxa_acumulada_ao_longo_do_a: records=118 last=2º trimestre 2025
+      - Taxa_acumulada_em_quatro_tri: records=118 last=2º trimestre 2025
+      - Taxa_trimestral_(em_relação: records=118 last=2º trimestre 2025
+      - Taxa_trimestre_contra_trimes: records=118 last=2º trimestre 2025
+  table_6612: Valores encadeados a preços de 1995 (nº6612)
+    period: 1º trimestre 1996 a 2º trimestre 2025
+    records: 118
+    last entry: 2º trimestre 2025
+  table_6613: Valores encadeados a preços de 1995 com ajuste sazonal (nº6613)
+    period: 1º trimestre 1996 a 2º trimestre 2025
+    records: 118
+    last entry: 2º trimestre 2025
+  table_6726: Taxa de poupança (nº6726)
+    period: 1º trimestre 2000 a 2º trimestre 2025
+    records: 101
+    last entry: 2º trimestre 2025
+  table_6727: Taxa de investimento (nº6727)
+    period: 1º trimestre 1996 a 2º trimestre 2025
+    records: 117
+    last entry: 2º trimestre 2025
+
+Category: PMS
+  table_5906:
+    table_5906/receita: PMS - Índice e variação da receita nominal e do volume de serviços (2022 = 100) - Receita (nº5906)
+      period: janeiro 2011 a agosto 2025
+      sheets: 6
+        - PMS_-_Número-índice_(2022=10: records=176 last=agosto 2025
+        - PMS_-_Número-índice_com_ajus: records=176 last=agosto 2025
+        - PMS_-_Variação_acumulada_em: records=176 last=agosto 2025
+        - PMS_-_Variação_acumulada_no: records=176 last=agosto 2025
+        - PMS_-_Variação_mês_mesmo_mês: records=176 last=agosto 2025
+        - PMS_-_Variação_mês_mês_imedi: records=176 last=agosto 2025
+    table_5906/volume: PMS - Índice e variação da receita nominal e do volume de serviços (2022 = 100) - Volume (nº5906)
+      period: janeiro 2011 a agosto 2025
+      sheets: 6
+        - PMS_-_Número-índice_(2022=10: records=176 last=agosto 2025
+        - PMS_-_Número-índice_com_ajus: records=176 last=agosto 2025
+        - PMS_-_Variação_acumulada_em: records=176 last=agosto 2025
+        - PMS_-_Variação_acumulada_no: records=176 last=agosto 2025
+        - PMS_-_Variação_mês_mesmo_mês: records=176 last=agosto 2025
+        - PMS_-_Variação_mês_mês_imedi: records=176 last=agosto 2025
+
+Report generated at 2025-11-08 17:59 UTC

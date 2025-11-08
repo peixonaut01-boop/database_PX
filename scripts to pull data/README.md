@@ -114,6 +114,12 @@ python run_all_tables.py
 python run_all_pms.py
 ```
 
+### Generate status summary:
+```bash
+python summarize_status.py
+```
+Creates `status_summary.txt` at the project root summarizing workflow schedules/status and Firebase data freshness.
+
 **Note:** Make sure all URLs are configured correctly before running all tables.
 
 ## Configuration
