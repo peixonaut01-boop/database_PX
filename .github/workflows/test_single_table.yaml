@@ -1,0 +1,35 @@
+name: Test Single IBGE Table
+
+on:
+  workflow_dispatch: # Manual trigger only
+
+jobs:
+  test-single-table:
+    runs-on: ubuntu-latest
+    name: Test Single Table Update
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        
+    - name: Test Single Table (1620)
+      run: |
+        echo "=== Testing single table update ==="
+        cd "scripts to pull data"
+        python ibge_CNT.py
+        
+    - name: Verify data update
+      run: |
+        cd "scripts to pull data"
+        python verify_structure.py
+

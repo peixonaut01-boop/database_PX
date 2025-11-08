@@ -189,21 +189,43 @@ def clean_data_for_json(data):
     
     if isinstance(data, pd.DataFrame):
         data_dict = data.to_dict(orient='records')
+        data_type = 'dataframe'
+    elif isinstance(data, dict):
+        data_dict = data
+        data_type = 'dict'
     else:
         data_dict = data
+        data_type = 'list'
     
     # Replace NaN, Infinity, and -Infinity with None
     def clean_value(v):
-        if isinstance(v, float):
-            if pd.isna(v) or math.isnan(v):
-                return None
-            if math.isinf(v):
-                return None
+        if isinstance(v, dict):
+            return {k: clean_value(val) for k, val in v.items()}
+        if isinstance(v, list):
+            return [clean_value(item) for item in v]
+        try:
+            if isinstance(v, float):
+                if pd.isna(v) or math.isnan(v):
+                    return None
+                if math.isinf(v):
+                    return None
+            else:
+                if pd.isna(v):
+                    return None
+        except TypeError:
+            # pd.isna raises TypeError for some non-numeric types; leave value as-is
+            pass
         return v
+    
+    if data_type == 'dict':
+        return {k: clean_value(v) for k, v in data_dict.items()}
     
     cleaned_data = []
     for record in data_dict:
-        cleaned_record = {k: clean_value(v) for k, v in record.items()}
+        if isinstance(record, dict):
+            cleaned_record = {k: clean_value(v) for k, v in record.items()}
+        else:
+            cleaned_record = clean_value(record)
         cleaned_data.append(cleaned_record)
     
     return cleaned_data

@@ -6,7 +6,10 @@ This directory contains scripts to fetch data from IBGE (Brazilian Institute of 
 
 - `ibge_base.py` - Base module with reusable functions for fetching and uploading data
 - Individual table scripts (ibge_XXXX.py) - Scripts for each IBGE table
-- `run_all_tables.py` - Master script to run all table scripts
+- `run_all_tables.py` - Master script to run all CNT table scripts
+- `run_all_pms.py` - Master script to run all PMS table scripts
+- `verify_structure.py` - Verifies CNT Firebase structure
+- `verify_pms_structure.py` - Verifies PMS Firebase structure
 
 ## Tables
 
@@ -67,6 +70,20 @@ Some tables contain multiple sheets in the Excel file:
 
 For multi-sheet tables, each sheet is uploaded with the format: `[Table Name] - [Sheet Name]`
 
+### Pesquisa Mensal de Serviços (Monthly Services Survey - PMS)
+
+1. **Table 5906 - Receita** - `ibge_5906_receita.py`
+   - **Name:** Índice e variação da receita nominal e do volume de serviços (2022 = 100) - Receita
+   - **Period:** janeiro 2011 a agosto 2025
+   - **Sheets:** 6 sheets (each uploaded as separate Firebase node)
+   - **Firebase Path:** `pms_data/table_5906/receita`
+
+2. **Table 5906 - Volume** - `ibge_5906_volume.py`
+   - **Name:** Índice e variação da receita nominal e do volume de serviços (2022 = 100) - Volume
+   - **Period:** janeiro 2011 a agosto 2025
+   - **Sheets:** 6 sheets (each uploaded as separate Firebase node)
+   - **Firebase Path:** `pms_data/table_5906/volume`
+
 ### Current Status:
 
 - ✅ **Table 1620** - Working (Single sheet)
@@ -92,19 +109,25 @@ python ibge_CNT.py
 python run_all_tables.py
 ```
 
+### Run all PMS tables:
+```bash
+python run_all_pms.py
+```
+
 **Note:** Make sure all URLs are configured correctly before running all tables.
 
 ## Configuration
 
 All scripts use the same Firebase database:
 - **Base URL:** `https://peixo-28d2d-default-rtdb.firebaseio.com`
-- **Base Path:** `ibge_data/`
+- **CNT Base Path:** `ibge_data/`
+- **PMS Base Path:** `pms_data/`
 
 ## Firebase Data Structure
 
-### Nested Structure
+### CNT Nested Structure
 
-All tables are stored in a nested structure under `ibge_data/`:
+All CNT tables are stored in a nested structure under `ibge_data/`:
 
 ```
 ibge_data/
@@ -128,13 +151,30 @@ ibge_data/
     └── metadata
 ```
 
-### Single-Sheet Tables
+### CNT Single-Sheet Tables
 - **Path:** `ibge_data/table_{number}/data`
 - **Metadata:** `ibge_data/table_{number}/metadata`
 
-### Multi-Sheet Tables
+### CNT Multi-Sheet Tables
 - **Sheets Path:** `ibge_data/table_{number}/sheets/{sheet_name}/data`
 - **Metadata:** `ibge_data/table_{number}/metadata` (includes sheet list)
+
+### PMS Nested Structure
+
+PMS tables are stored under `pms_data/`:
+
+```
+pms_data/
+└── table_5906/
+    ├── receita/
+    │   ├── sheets/
+    │   │   └── ... (6 sheets)
+    │   └── metadata
+    └── volume/
+        ├── sheets/
+        │   └── ... (6 sheets)
+        └── metadata
+```
 
 ### Metadata Structure
 
