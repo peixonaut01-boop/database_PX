@@ -9,7 +9,9 @@ import requests
 REPO_OWNER = 'guithom04'
 REPO_NAME = 'database_PX'
 FIREBASE_EXPORT_URL = 'https://peixo-28d2d-default-rtdb.firebaseio.com/.json?format=export'
-SUMMARY_PATH = Path('usage_summary.txt')
+SCRIPT_DIR = Path(__file__).resolve().parent
+REPO_ROOT = SCRIPT_DIR.parent
+SUMMARY_PATH = REPO_ROOT / 'usage_summary.txt'
 
 
 def human_bytes(num: int | float) -> str:
