@@ -1,6 +1,8 @@
 name: Update IBGE CNT Data
-true:
-  workflow_dispatch: null
+
+on:
+  workflow_dispatch:
+
 jobs:
   update-ibge-data:
     runs-on: ubuntu-latest
@@ -8,37 +10,30 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
+
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
         python-version: '3.11'
-    - name: Install dependencies
-      run: 'python -m pip install --upgrade pip
 
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-        '
     - name: First Run - Update all IBGE tables
-      run: 'echo "=== First Run: Updating IBGE data ==="
-
+      run: |
+        echo "=== First Run: Updating IBGE data ==="
         cd "scripts to pull data"
-
         python run_all_tables.py
 
-        '
     - name: Second Run - Update all IBGE tables (retry)
-      run: 'echo "=== Second Run: Updating IBGE data (retry) ==="
-
+      run: |
+        echo "=== Second Run: Updating IBGE data (retry) ==="
         cd "scripts to pull data"
-
         python run_all_tables.py
 
-        '
     - name: Verify data update
-      run: 'cd "scripts to pull data"
-
+      run: |
+        cd "scripts to pull data"
         python verify_structure.py
-
-        '
-'on':
-  workflow_dispatch: {}
