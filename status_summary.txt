@@ -126,4 +126,21 @@ Category: PMS
         - PMS_-_Variação_mês_mesmo_mês: records=3568 last=agosto 2025
         - PMS_-_Variação_mês_mês_imedi: records=3500 last=agosto 2025
 
-Report generated at 2025-11-08 18:59 UTC
+Category: PMC
+  table_8190:
+    table_8190/receita: PMC - Índices de receita nominal de atacado especializado em produtos alimentícios, bebidas e fumo (2022 = 100) - Receita (nº8190)
+      period: janeiro 2022 a agosto 2025
+      sheets: 4
+        - PMC_-_Número-índice_(2022=10: records=44 last=agosto 2025
+        - PMC_-_Variação_acumulada_em: records=21 last=agosto 2025
+        - PMC_-_Variação_acumulada_no: records=32 last=agosto 2025
+        - PMC_-_Variação_mês_mesmo_mês: records=32 last=agosto 2025
+    table_8190/volume: PMC - Índices de volume de atacado especializado em produtos alimentícios, bebidas e fumo (2022 = 100) - Volume (nº8190)
+      period: janeiro 2022 a agosto 2025
+      sheets: 4
+        - PMC_-_Número-índice_(2022=10: records=44 last=agosto 2025
+        - PMC_-_Variação_acumulada_em: records=21 last=agosto 2025
+        - PMC_-_Variação_acumulada_no: records=32 last=agosto 2025
+        - PMC_-_Variação_mês_mesmo_mês: records=32 last=agosto 2025
+
+Report generated at 2025-11-08 19:41 UTC

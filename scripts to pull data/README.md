@@ -96,6 +96,14 @@ For multi-sheet tables, each sheet is uploaded with the format: `[Table Name] - 
    - **Subbranches:** `receita` and `volume`, each with 6 sheets, capturing hierarchical atividades e subatividades
    - **Firebase Path:** `ibge_data/pms/table_8688/{receita|volume}`
 
+### Pesquisa Mensal de Comércio (Monthly Trade Survey - PMC)
+
+1. **Table 8190 (Receita & Volume)** - `ibge_8190.py`
+   - **Name:** Índices de volume e de receita nominal de atacado especializado em produtos alimentícios, bebidas e fumo (2022 = 100)
+   - **Period:** janeiro 2022 a agosto 2025
+   - **Subbranches:** `receita` and `volume`, each with 4 sheets (índice, variações, acumulados)
+   - **Firebase Path:** `ibge_data/pmc/table_8190/{receita|volume}`
+
 ### Current Status:
 
 - ✅ **Table 1620** - Working (Single sheet)

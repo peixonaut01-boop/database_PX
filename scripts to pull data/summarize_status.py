@@ -194,7 +194,7 @@ def build_summary() -> str:
         lines.append('')
 
     lines.append('=== Firebase Data Summary ===')
-    for category in ('cnt', 'pms'):
+    for category in ('cnt', 'pms', 'pmc'):
         category_summary = summarize_category(category)
         lines.append(f"Category: {category.upper()}")
         if not category_summary['tables']:
