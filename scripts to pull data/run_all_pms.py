@@ -10,6 +10,7 @@ import os
 PMS_SCRIPTS = [
     'ibge_5906_receita.py',  # Table 5906 - Receita (Revenue) - 6 sheets
     'ibge_5906_volume.py',   # Table 5906 - Volume - 6 sheets
+    'ibge_8163.py',          # Table 8163 - Receita & Volume by segments
 ]
 
 def run_script(script_name):

@@ -84,6 +84,12 @@ For multi-sheet tables, each sheet is uploaded with the format: `[Table Name] - 
    - **Sheets:** 6 sheets (each uploaded as separate Firebase node)
    - **Firebase Path:** `ibge_data/pms/table_5906/volume`
 
+3. **Table 8163 (Receita & Volume)** - `ibge_8163.py`
+   - **Name:** Índice e variação da receita nominal e do volume de serviços, por segmentos de serviços (2022 = 100)
+   - **Period:** janeiro 2011 a agosto 2025
+   - **Subbranches:** `receita` and `volume`, each with 6 sheets and 20 service segments
+   - **Firebase Path:** `ibge_data/pms/table_8163/{receita|volume}`
+
 ### Current Status:
 
 - ✅ **Table 1620** - Working (Single sheet)
