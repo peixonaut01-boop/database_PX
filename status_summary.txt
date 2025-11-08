@@ -106,5 +106,24 @@ Category: PMS
         - PMS_-_Variação_acumulada_no: records=2092 last=agosto 2025
         - PMS_-_Variação_mês_mesmo_mês: records=2092 last=agosto 2025
         - PMS_-_Variação_mês_mês_imedi: records=1925 last=agosto 2025
+  table_8688:
+    table_8688/receita: PMS - Índice e variação da receita nominal e do volume de serviços, por atividades de serviços e suas subdivisões (2022 = 100) - Receita (nº8688)
+      period: janeiro 2011 a agosto 2025
+      sheets: 6
+        - PMS_-_Número-índice_(2022=10: records=3916 last=agosto 2025
+        - PMS_-_Número-índice_com_ajus: records=3520 last=agosto 2025
+        - PMS_-_Variação_acumulada_em: records=3249 last=agosto 2025
+        - PMS_-_Variação_acumulada_no: records=3568 last=agosto 2025
+        - PMS_-_Variação_mês_mesmo_mês: records=3568 last=agosto 2025
+        - PMS_-_Variação_mês_mês_imedi: records=3500 last=agosto 2025
+    table_8688/volume: PMS - Índice e variação da receita nominal e do volume de serviços, por atividades de serviços e suas subdivisões (2022 = 100) - Volume (nº8688)
+      period: janeiro 2011 a agosto 2025
+      sheets: 6
+        - PMS_-_Número-índice_(2022=10: records=3916 last=agosto 2025
+        - PMS_-_Número-índice_com_ajus: records=3520 last=agosto 2025
+        - PMS_-_Variação_acumulada_em: records=3249 last=agosto 2025
+        - PMS_-_Variação_acumulada_no: records=3568 last=agosto 2025
+        - PMS_-_Variação_mês_mesmo_mês: records=3568 last=agosto 2025
+        - PMS_-_Variação_mês_mês_imedi: records=3500 last=agosto 2025
 
-Report generated at 2025-11-08 18:17 UTC
+Report generated at 2025-11-08 18:44 UTC

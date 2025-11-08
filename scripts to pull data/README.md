@@ -90,6 +90,12 @@ For multi-sheet tables, each sheet is uploaded with the format: `[Table Name] - 
    - **Subbranches:** `receita` and `volume`, each with 6 sheets and 20 service segments
    - **Firebase Path:** `ibge_data/pms/table_8163/{receita|volume}`
 
+4. **Table 8688 (Receita & Volume)** - `ibge_8688.py`
+   - **Name:** Índice e variação da receita nominal e do volume de serviços, por atividades de serviços e suas subdivisões (2022 = 100)
+   - **Period:** janeiro 2011 a agosto 2025
+   - **Subbranches:** `receita` and `volume`, each with 6 sheets, capturing hierarchical atividades e subatividades
+   - **Firebase Path:** `ibge_data/pms/table_8688/{receita|volume}`
+
 ### Current Status:
 
 - ✅ **Table 1620** - Working (Single sheet)
