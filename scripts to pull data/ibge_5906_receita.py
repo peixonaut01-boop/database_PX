@@ -96,8 +96,8 @@ def fetch_and_upload_ibge_data():
                 continue
         
         # Upload all processed sheets to Firebase with nested structure
-        # Store under pms_data branch
-        firebase_base_path = f'pms_data/table_{TABLE_NUMBER}/receita'
+        # Store under ibge_data/pms branch
+        firebase_base_path = f'ibge_data/pms/table_{TABLE_NUMBER}/receita'
         print(f"\nUploading {len(processed_sheets)} sheets to Firebase...")
         
         results = {}

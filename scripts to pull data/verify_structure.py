@@ -25,9 +25,11 @@ print("="*60)
 print("Verifying New Firebase Structure")
 print("="*60)
 
+base_path = 'ibge_data/cnt'
+
 # Check single-sheet table
 print("\n1. Single-sheet table (1620):")
-metadata_1620 = get_firebase_data('ibge_data/table_1620/metadata')
+metadata_1620 = get_firebase_data(f'{base_path}/table_1620/metadata')
 if metadata_1620:
     print(f"   [OK] Metadata found: {metadata_1620.get('table_name', 'N/A')[:50]}...")
     print(f"   [OK] Table number: {metadata_1620.get('table_number')}")
@@ -35,7 +37,7 @@ if metadata_1620:
 else:
     print("   [ERROR] Metadata not found")
 
-data_1620 = get_firebase_data('ibge_data/table_1620/data')
+data_1620 = get_firebase_data(f'{base_path}/table_1620/data')
 if data_1620:
     count = len(data_1620) if isinstance(data_1620, list) else 'N/A'
     print(f"   [OK] Data found: {count} records")
@@ -44,7 +46,7 @@ else:
 
 # Check multi-sheet table (2072)
 print("\n2. Multi-sheet table (2072):")
-metadata_2072 = get_firebase_data('ibge_data/table_2072/metadata')
+metadata_2072 = get_firebase_data(f'{base_path}/table_2072/metadata')
 if metadata_2072:
     print(f"   [OK] Metadata found: {metadata_2072.get('table_name', 'N/A')[:50]}...")
     print(f"   [OK] Table number: {metadata_2072.get('table_number')}")
@@ -55,16 +57,23 @@ else:
     print("   [ERROR] Metadata not found")
 
 # Check one sheet from 2072
-sheet_2072 = get_firebase_data('ibge_data/table_2072/sheets/Produto_Interno_Bruto_(Milh/data')
-if sheet_2072:
-    count = len(sheet_2072) if isinstance(sheet_2072, list) else 'N/A'
-    print(f"   [OK] Sample sheet data: {count} records")
+sample_sheet_name = None
+if metadata_2072 and isinstance(metadata_2072.get('sheets'), list) and metadata_2072['sheets']:
+    sample_sheet_name = metadata_2072['sheets'][0].get('clean_name')
+
+if sample_sheet_name:
+    sheet_2072 = get_firebase_data(f'{base_path}/table_2072/sheets/{sample_sheet_name}/data')
+    if sheet_2072:
+        count = len(sheet_2072) if isinstance(sheet_2072, list) else 'N/A'
+        print(f"   [OK] Sample sheet data: {count} records ({sample_sheet_name})")
+    else:
+        print(f"   [ERROR] Sample sheet not found: {sample_sheet_name}")
 else:
-    print("   [ERROR] Sample sheet not found")
+    print("   [WARNING] No sheet metadata available to verify sample data")
 
 # Check multi-sheet table (5932)
 print("\n3. Multi-sheet table (5932):")
-metadata_5932 = get_firebase_data('ibge_data/table_5932/metadata')
+metadata_5932 = get_firebase_data(f'{base_path}/table_5932/metadata')
 if metadata_5932:
     print(f"   [OK] Metadata found: {metadata_5932.get('table_name', 'N/A')[:50]}...")
     print(f"   [OK] Table number: {metadata_5932.get('table_number')}")
@@ -76,7 +85,7 @@ else:
 print("\n4. Checking all tables:")
 tables = [1620, 1621, 1846, 2072, 5932, 6612, 6613, 6726, 6727]
 for table_num in tables:
-    metadata = get_firebase_data(f'ibge_data/table_{table_num}/metadata')
+    metadata = get_firebase_data(f'{base_path}/table_{table_num}/metadata')
     if metadata:
         print(f"   [OK] Table {table_num}: OK")
     else:

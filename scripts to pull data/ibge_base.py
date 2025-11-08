@@ -12,6 +12,16 @@ from urllib.parse import quote
 FIREBASE_BASE_URL = 'https://peixo-28d2d-default-rtdb.firebaseio.com'
 
 
+def get_category_base_path(category: str) -> str:
+    """
+    Return the base Firebase path for a given data category.
+    """
+    if not category:
+        category = 'cnt'
+    category_clean = category.strip('/').lower()
+    return f'ibge_data/{category_clean}'
+
+
 def fetch_ibge_data(ibge_url, skiprows=4, header_row=3, data_start_row=4):
     """
     Fetches IBGE data from the given URL and returns a processed DataFrame.
@@ -237,7 +247,7 @@ def upload_to_firebase_path(data, firebase_path):
     
     Args:
         data: List of dictionaries or DataFrame to upload
-        firebase_path: Firebase path (e.g., 'ibge_data/table_1620/data')
+        firebase_path: Firebase path (e.g., 'ibge_data/cnt/table_1620/data')
     
     Returns:
         bool: True if upload was successful, False otherwise
@@ -275,7 +285,7 @@ def upload_to_firebase_path(data, firebase_path):
         return False
 
 
-def upload_metadata(table_number, table_name, period_range=None, sheet_count=None):
+def upload_metadata(table_number, table_name, period_range=None, sheet_count=None, category='cnt'):
     """
     Uploads metadata for a table to Firebase.
     
@@ -301,7 +311,8 @@ def upload_metadata(table_number, table_name, period_range=None, sheet_count=Non
     
     # Upload metadata directly (it's already a dict, not a list)
     try:
-        path_parts = f'ibge_data/table_{table_number}/metadata'.split('/')
+        base_path = get_category_base_path(category)
+        path_parts = f'{base_path}/table_{table_number}/metadata'.split('/')
         encoded_parts = [quote(part, safe="") for part in path_parts]
         firebase_path_encoded = '/'.join(encoded_parts)
         firebase_url = f'{FIREBASE_BASE_URL}/{firebase_path_encoded}.json'
@@ -310,7 +321,7 @@ def upload_metadata(table_number, table_name, period_range=None, sheet_count=Non
         firebase_response.raise_for_status()
         
         if firebase_response.status_code == 200:
-            print(f"[SUCCESS] Metadata uploaded to: ibge_data/table_{table_number}/metadata")
+            print(f"[SUCCESS] Metadata uploaded to: {base_path}/table_{table_number}/metadata")
             return True
         else:
             print(f"[ERROR] Metadata upload failed with status code: {firebase_response.status_code}")
@@ -320,7 +331,7 @@ def upload_metadata(table_number, table_name, period_range=None, sheet_count=Non
         return False
 
 
-def upload_table_data(data, table_number, table_name, period_range=None):
+def upload_table_data(data, table_number, table_name, period_range=None, category='cnt'):
     """
     Uploads a single-sheet table to Firebase with nested structure.
     
@@ -337,11 +348,12 @@ def upload_table_data(data, table_number, table_name, period_range=None):
     print(f"   Table: {table_name}")
     
     # Upload data
-    data_path = f'ibge_data/table_{table_number}/data'
+    base_path = get_category_base_path(category)
+    data_path = f'{base_path}/table_{table_number}/data'
     data_success = upload_to_firebase_path(data, data_path)
     
     # Upload metadata
-    metadata_success = upload_metadata(table_number, table_name, period_range)
+    metadata_success = upload_metadata(table_number, table_name, period_range, category=category)
     
     return data_success and metadata_success
 
@@ -362,7 +374,7 @@ def clean_firebase_key(key):
     return cleaned
 
 
-def upload_multiple_sheets_to_firebase(sheets_data, table_number, table_name, period_range=None):
+def upload_multiple_sheets_to_firebase(sheets_data, table_number, table_name, period_range=None, category='cnt'):
     """
     Uploads multiple sheets to Firebase with nested structure.
     
@@ -379,6 +391,8 @@ def upload_multiple_sheets_to_firebase(sheets_data, table_number, table_name, pe
     print(f"   Table: {table_name}")
     print(f"   Sheets: {len([s for s in sheets_data.keys() if s.lower() not in ['notas', 'notes', 'metadata']])} sheets")
     
+    base_path = get_category_base_path(category)
+
     results = {}
     uploaded_sheets = []
     
@@ -392,7 +406,7 @@ def upload_multiple_sheets_to_firebase(sheets_data, table_number, table_name, pe
         clean_sheet_name = clean_firebase_key(sheet_name)
         
         # Upload sheet data to nested path
-        sheet_path = f'ibge_data/table_{table_number}/sheets/{clean_sheet_name}/data'
+        sheet_path = f'{base_path}/table_{table_number}/sheets/{clean_sheet_name}/data'
         
         try:
             success = upload_to_firebase_path(df, sheet_path)
@@ -418,9 +432,8 @@ def upload_multiple_sheets_to_firebase(sheets_data, table_number, table_name, pe
     if period_range:
         metadata['period_range'] = period_range
     
-    # Upload metadata directly
     try:
-        path_parts = f'ibge_data/table_{table_number}/metadata'.split('/')
+        path_parts = f'{base_path}/table_{table_number}/metadata'.split('/')
         encoded_parts = [quote(part, safe="") for part in path_parts]
         firebase_path_encoded = '/'.join(encoded_parts)
         firebase_url = f'{FIREBASE_BASE_URL}/{firebase_path_encoded}.json'
@@ -429,14 +442,11 @@ def upload_multiple_sheets_to_firebase(sheets_data, table_number, table_name, pe
         firebase_response.raise_for_status()
         
         if firebase_response.status_code == 200:
-            print(f"[SUCCESS] Metadata uploaded to: ibge_data/table_{table_number}/metadata")
-            metadata_success = True
+            print(f"[SUCCESS] Metadata uploaded to: {base_path}/table_{table_number}/metadata")
         else:
             print(f"[WARNING] Metadata upload failed with status code: {firebase_response.status_code}")
-            metadata_success = False
     except Exception as e:
         print(f"[WARNING] Failed to upload metadata: {e}")
-        metadata_success = False
     
     return results
 

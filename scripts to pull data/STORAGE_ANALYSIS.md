@@ -134,9 +134,9 @@ Firebase Root
 4. **Preserve Sheet Relationships**: For multi-sheet tables, nest sheets under table
 
 ### Implementation:
-- Change base path to `ibge_data/table_{number}/`
-- For multi-sheet: `ibge_data/table_{number}/sheets/{sheet_name}/`
-- Add metadata node: `ibge_data/table_{number}/metadata/`
+- Change base path to `ibge_data/<category>/table_{number}/` (e.g., `ibge_data/cnt/table_1620/`)
+- For multi-sheet: `ibge_data/<category>/table_{number}/sheets/{sheet_name}/`
+- Add metadata node: `ibge_data/<category>/table_{number}/metadata/`
 
 ## Migration Path
 

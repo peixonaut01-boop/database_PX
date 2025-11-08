@@ -76,13 +76,13 @@ For multi-sheet tables, each sheet is uploaded with the format: `[Table Name] - 
    - **Name:** Índice e variação da receita nominal e do volume de serviços (2022 = 100) - Receita
    - **Period:** janeiro 2011 a agosto 2025
    - **Sheets:** 6 sheets (each uploaded as separate Firebase node)
-   - **Firebase Path:** `pms_data/table_5906/receita`
+   - **Firebase Path:** `ibge_data/pms/table_5906/receita`
 
 2. **Table 5906 - Volume** - `ibge_5906_volume.py`
    - **Name:** Índice e variação da receita nominal e do volume de serviços (2022 = 100) - Volume
    - **Period:** janeiro 2011 a agosto 2025
    - **Sheets:** 6 sheets (each uploaded as separate Firebase node)
-   - **Firebase Path:** `pms_data/table_5906/volume`
+   - **Firebase Path:** `ibge_data/pms/table_5906/volume`
 
 ### Current Status:
 
@@ -120,61 +120,59 @@ python run_all_pms.py
 
 All scripts use the same Firebase database:
 - **Base URL:** `https://peixo-28d2d-default-rtdb.firebaseio.com`
-- **CNT Base Path:** `ibge_data/`
-- **PMS Base Path:** `pms_data/`
+- **CNT Base Path:** `ibge_data/cnt/`
+- **PMS Base Path:** `ibge_data/pms/`
 
 ## Firebase Data Structure
 
 ### CNT Nested Structure
 
-All CNT tables are stored in a nested structure under `ibge_data/`:
+All CNT tables are stored in a nested structure under `ibge_data/cnt/`:
 
 ```
 ibge_data/
-├── table_1620/
-│   ├── data (array of records)
-│   └── metadata (table info)
-├── table_1621/
-│   ├── data
-│   └── metadata
-├── table_2072/
-│   ├── sheets/
-│   │   ├── produto_interno_bruto/
-│   │   │   └── data
-│   │   ├── salarios/
-│   │   │   └── data
-│   │   └── ... (other sheets)
-│   └── metadata (includes sheet list)
-└── table_5932/
-    ├── sheets/
-    │   └── ... (4 sheets)
-    └── metadata
+├── cnt/
+│   ├── table_1620/
+│   │   ├── data (array of records)
+│   │   └── metadata (table info)
+│   ├── table_1621/
+│   │   ├── data
+│   │   └── metadata
+│   ├── table_2072/
+│   │   ├── sheets/
+│   │   │   ├── produto_interno_bruto/
+│   │   │   │   └── data
+│   │   │   ├── salarios/
+│   │   │   │   └── data
+│   │   │   └── ... (other sheets)
+│   │   └── metadata (includes sheet list)
+│   └── table_5932/
+│       ├── sheets/
+│       │   └── ... (4 sheets)
+│       └── metadata
+└── pms/
+    └── table_5906/
+        ├── receita/
+        │   ├── sheets/
+        │   │   └── ... (6 sheets)
+        │   └── metadata
+        └── volume/
+            ├── sheets/
+            │   └── ... (6 sheets)
+            └── metadata
 ```
 
 ### CNT Single-Sheet Tables
-- **Path:** `ibge_data/table_{number}/data`
-- **Metadata:** `ibge_data/table_{number}/metadata`
+- **Path:** `ibge_data/cnt/table_{number}/data`
+- **Metadata:** `ibge_data/cnt/table_{number}/metadata`
 
 ### CNT Multi-Sheet Tables
-- **Sheets Path:** `ibge_data/table_{number}/sheets/{sheet_name}/data`
-- **Metadata:** `ibge_data/table_{number}/metadata` (includes sheet list)
+- **Sheets Path:** `ibge_data/cnt/table_{number}/sheets/{sheet_name}/data`
+- **Metadata:** `ibge_data/cnt/table_{number}/metadata` (includes sheet list)
 
 ### PMS Nested Structure
 
-PMS tables are stored under `pms_data/`:
-
-```
-pms_data/
-└── table_5906/
-    ├── receita/
-    │   ├── sheets/
-    │   │   └── ... (6 sheets)
-    │   └── metadata
-    └── volume/
-        ├── sheets/
-        │   └── ... (6 sheets)
-        └── metadata
-```
+PMS tables are stored under `ibge_data/pms/`.
 
 ### Metadata Structure
 

@@ -20,11 +20,12 @@ def main():
     print("Verifying PMS Firebase structure")
     print("=" * 60)
 
+    base_path = 'ibge_data/pms'
     branches = {
-        'Receita metadata': 'pms_data/table_5906/receita/metadata',
-        'Receita sheets': 'pms_data/table_5906/receita/sheets',
-        'Volume metadata': 'pms_data/table_5906/volume/metadata',
-        'Volume sheets': 'pms_data/table_5906/volume/sheets',
+        'Receita metadata': f'{base_path}/table_5906/receita/metadata',
+        'Receita sheets': f'{base_path}/table_5906/receita/sheets',
+        'Volume metadata': f'{base_path}/table_5906/volume/metadata',
+        'Volume sheets': f'{base_path}/table_5906/volume/sheets',
     }
 
     for name, path in branches.items():
