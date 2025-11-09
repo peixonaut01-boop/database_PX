@@ -1,6 +1,6 @@
 # database_PX
 
-Pipeline and tooling for collecting IBGE datasets (CNT, PMS, PMC, PNADCT), pushing them to Firebase, and validating the results.
+Pipeline and tooling for collecting IBGE datasets (CNT, PMS, PMC, PNADCT, PNADCM), pushing them to Firebase, and validating the results.
 
 ## Repository layout
 
@@ -33,6 +33,7 @@ Running with no arguments opens an interactive menu. Common one-liners:
 | Run entire category | `python "scripts to pull data/update_database.py" run pms` |
 | Run specific tables | `python "scripts to pull data/update_database.py" run pmc --table 8880 --table 8881` |
 | Run PNADCT unemployment only | `python "scripts to pull data/update_database.py" run pnadct --table 6468` |
+| Run all PNADCM tables | `python "scripts to pull data/update_database.py" run pnadcm` |
 | Skip verification | add `--no-verify` |
 | Add/update workflow cron | `python "scripts to pull data/update_database.py" schedule cnt --cron "0 12 1-4 3,6,9,12 *"` |
 | Remove workflow cron | `python "scripts to pull data/update_database.py" schedule cnt` |
@@ -47,6 +48,7 @@ Workflows are manual-only and appear in the Actions tab:
 - `Update IBGE PMS Data`
 - `Update IBGE PMC Data`
 - `Update IBGE PNADCT Data`
+- `Update IBGE PNADCM Data`
 - `Test Single IBGE Table`
 
 Use **Run workflow** in GitHub whenever you want the hosted runner to execute the update sequence. To reintroduce automatic cadences, either edit the YAML or use the CLI `schedule` command.

@@ -141,6 +141,18 @@ TABLE_REGISTRY: Dict[CategoryKey, Dict[str, object]] = {
             ),
         },
     },
+    'pnadcm': {
+        'label': 'PNAD Contínua Móvel (Moving-quarter Survey)',
+        'workflow': REPO_ROOT / '.github/workflows/update_ibge_pnadcm.yaml',
+        'run_all': 'ibge_pnadcm_tables.py',
+        'verify': None,
+        'tables': {
+            'all': TableInfo(
+                script='ibge_pnadcm_tables.py',
+                description='All configured PNADCM tables (multi-table ingestion)',
+            ),
+        },
+    },
 }
 
 
