@@ -1,4 +1,4 @@
 === Usage Summary ===
-Firebase export size: 32.99 MB (approximate JSON export)
+Firebase export size: 34.72 MB (approximate JSON export)
 GitHub repository size: unavailable (set GITHUB_TOKEN to query)
 GitHub Actions usage: base free tier offers 2,000 minutes/month; current workflows typically consume <5 minutes per full run. Check https://github.com/settings/billing for exact usage.

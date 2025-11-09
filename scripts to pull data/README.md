@@ -11,6 +11,7 @@ This directory contains scripts to fetch data from IBGE (Brazilian Institute of 
 - `ibge_pnadct_tables.py` - Master script to run all configured PNAD Contínua tables
 - `ibge_pnadcm_tables.py` - Master script to run all configured PNAD Contínua Móvel tables
 - `ibge_6468.py` - Standalone PNAD Contínua unemployment rate (for historical merging)
+- `ibge_ipp_tables.py` - Master script for Producer Price Index (IPP) tables
 - `verify_structure.py` - Verifies CNT Firebase structure
 - `verify_pms_structure.py` - Verifies PMS Firebase structure
 
@@ -207,6 +208,15 @@ All scripts use the same Firebase database:
 - **PMS Base Path:** `ibge_data/pms/`
 - **PNADCT Base Path:** `ibge_data/pnadct/`
 - **PNADCM Base Path:** `ibge_data/pnadcm/`
+- **IPP Base Path:** `ibge_data/ipp/`
+
+### Índice de Preços ao Produtor (Producer Price Index - IPP)
+
+- **All IPP tables** - `ibge_ipp_tables.py`
+  - **Name:** Aggregated ingestion for IPP indices by industrial group, activity, and economic categories
+  - **Period:** janeiro 2014 onward (full SIDRA history for the 2018=100 series)
+  - **Firebase Path:** `ibge_data/ipp/table_{number}/sheets/{sheet}/data`
+  - **Notes:** All IPP tables are multi-sheet; ingestion keeps each sheet as a separate branch and records the detected period range in metadata.
 
 ## Firebase Data Structure
 

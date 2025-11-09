@@ -1,0 +1,35 @@
+name: Update IBGE IPP Data
+
+on:
+  workflow_dispatch:
+
+jobs:
+  update-ibge-ipp:
+    runs-on: ubuntu-latest
+    name: Update IBGE IPP Data (manual trigger)
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: First Run - Update IPP tables
+      run: |
+        echo "=== First Run: Updating IPP tables ==="
+        cd "scripts to pull data"
+        python ibge_ipp_tables.py
+
+    - name: Second Run - Update IPP tables (retry)
+      run: |
+        echo "=== Second Run: Updating IPP tables (retry) ==="
+        cd "scripts to pull data"
+        python ibge_ipp_tables.py
+

@@ -153,6 +153,30 @@ TABLE_REGISTRY: Dict[CategoryKey, Dict[str, object]] = {
             ),
         },
     },
+    'ipp': {
+        'label': 'IPP (Producer Price Index)',
+        'workflow': REPO_ROOT / '.github/workflows/update_ibge_ipp.yaml',
+        'run_all': 'ibge_ipp_tables.py',
+        'verify': None,
+        'tables': {
+            '6723': TableInfo(
+                script='ibge_ipp_tables.py',
+                description='Table 6723 - Índice de preços por grupos selecionados (multi-sheet)',
+            ),
+            '6903': TableInfo(
+                script='ibge_ipp_tables.py',
+                description='Table 6903 - Índice por atividades industriais (multi-sheet)',
+            ),
+            '6904': TableInfo(
+                script='ibge_ipp_tables.py',
+                description='Table 6904 - Índice por grandes categorias econômicas (multi-sheet)',
+            ),
+            'all': TableInfo(
+                script='ibge_ipp_tables.py',
+                description='All configured IPP tables (multi-sheet ingestion)',
+            ),
+        },
+    },
 }
 
 
