@@ -1,0 +1,35 @@
+name: Update IBGE PNADCT Data
+
+on:
+  workflow_dispatch:
+
+jobs:
+  update-ibge-pnadct:
+    runs-on: ubuntu-latest
+    name: Update IBGE PNADCT Data (manual trigger)
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: First Run - Update PNADCT tables
+      run: |
+        echo "=== First Run: Updating PNADCT tables ==="
+        cd "scripts to pull data"
+        python ibge_pnadct_tables.py
+
+    - name: Second Run - Update PNADCT tables (retry)
+      run: |
+        echo "=== Second Run: Updating PNADCT tables (retry) ==="
+        cd "scripts to pull data"
+        python ibge_pnadct_tables.py
+

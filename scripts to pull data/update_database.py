@@ -125,6 +125,22 @@ TABLE_REGISTRY: Dict[CategoryKey, Dict[str, object]] = {
             ),
         },
     },
+    'pnadct': {
+        'label': 'PNAD Contínua (Quarterly Household Survey)',
+        'workflow': REPO_ROOT / '.github/workflows/update_ibge_pnadct.yaml',
+        'run_all': 'ibge_pnadct_tables.py',
+        'verify': None,
+        'tables': {
+            '6468': TableInfo(
+                script='ibge_6468.py',
+                description='Table 6468 - Taxa de desocupação (série principal)',
+            ),
+            'all': TableInfo(
+                script='ibge_pnadct_tables.py',
+                description='All configured PNADCT tables (multi-table ingestion)',
+            ),
+        },
+    },
 }
 
 
@@ -232,6 +248,7 @@ def update_schedule(category: CategoryKey, cron: Optional[str]) -> None:
 
 def interactive_menu() -> None:
     print("=== IBGE Database Update Console ===")
+    category_prompt = f"Category ({'/'.join(TABLE_REGISTRY.keys())}): "
     while True:
         print(
             "\nChoose an option:\n"
@@ -247,19 +264,19 @@ def interactive_menu() -> None:
         if choice == '1':
             print_categories()
         elif choice == '2':
-            key = input("Category (cnt/pms/pmc): ").strip().lower()
+            key = input(category_prompt).strip().lower()
             if key in TABLE_REGISTRY:
                 print_tables(key)
             else:
                 print("[ERROR] Invalid category.")
         elif choice == '3':
-            key = input("Category to run (cnt/pms/pmc): ").strip().lower()
+            key = input(f"Category to run ({'/'.join(TABLE_REGISTRY.keys())}): ").strip().lower()
             if key in TABLE_REGISTRY:
                 run_category(key, verify=True)
             else:
                 print("[ERROR] Invalid category.")
         elif choice == '4':
-            key = input("Category (cnt/pms/pmc): ").strip().lower()
+            key = input(category_prompt).strip().lower()
             if key not in TABLE_REGISTRY:
                 print("[ERROR] Invalid category.")
                 continue
@@ -268,7 +285,7 @@ def interactive_menu() -> None:
             selected = [item.strip() for item in table_input.split(',') if item.strip()]
             run_category(key, tables=selected, verify=True)
         elif choice == '5':
-            key = input("Workflow category (cnt/pms/pmc): ").strip().lower()
+            key = input(f"Workflow category ({'/'.join(TABLE_REGISTRY.keys())}): ").strip().lower()
             if key not in TABLE_REGISTRY:
                 print("[ERROR] Invalid category.")
                 continue

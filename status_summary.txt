@@ -262,4 +262,4 @@ Category: PMC
         - PMC_-_Variação_mês_mesmo_mês: records=296 last=agosto 2025
         - PMC_-_Variação_mês_mês_imedi: records=307 last=agosto 2025
 
-Report generated at 2025-11-08 21:13 UTC
+Report generated at 2025-11-09 03:19 UTC

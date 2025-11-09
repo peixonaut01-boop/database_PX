@@ -8,6 +8,8 @@ This directory contains scripts to fetch data from IBGE (Brazilian Institute of 
 - Individual table scripts (ibge_XXXX.py) - Scripts for each IBGE table
 - `run_all_tables.py` - Master script to run all CNT table scripts
 - `run_all_pms.py` - Master script to run all PMS table scripts
+- `ibge_pnadct_tables.py` - Master script to run all configured PNAD Contínua tables
+- `ibge_6468.py` - Standalone PNAD Contínua unemployment rate (for historical merging)
 - `verify_structure.py` - Verifies CNT Firebase structure
 - `verify_pms_structure.py` - Verifies PMS Firebase structure
 
@@ -140,6 +142,16 @@ For multi-sheet tables, each sheet is uploaded with the format: `[Table Name] - 
    - **Subbranches:** `receita` and `volume`
    - **Firebase Path:** `ibge_data/pmc/table_8884/{receita|volume}`
 
+### PNAD Contínua Trimestral (Household Survey - PNADCT)
+
+The PNADCT loader centralizes dozens of quarterly labor market tables in a single script:
+
+- **All PNADCT tables** - `ibge_pnadct_tables.py`
+  - **Name:** Aggregated ingestion for PNAD Contínua labor, income, hours-worked, and population breakdowns
+  - **Period:** 1º trimestre 2012 (or first available) to 2º trimestre 2025
+  - **Firebase Path:** `ibge_data/pnadct/table_{number}/...` with automatic handling of sheet structures
+  - **Notes:** The script detects single vs. multi-sheet workbooks, derives period metadata, and uploads to Firebase. The dedicated `ibge_6468.py` script keeps the unemployment headline series available for merging legacy history.
+
 ### Current Status:
 
 - ✅ **Table 1620** - Working (Single sheet)
@@ -184,6 +196,7 @@ All scripts use the same Firebase database:
 - **Base URL:** `https://peixo-28d2d-default-rtdb.firebaseio.com`
 - **CNT Base Path:** `ibge_data/cnt/`
 - **PMS Base Path:** `ibge_data/pms/`
+- **PNADCT Base Path:** `ibge_data/pnadct/`
 
 ## Firebase Data Structure
 
