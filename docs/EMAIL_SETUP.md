@@ -127,10 +127,10 @@ Para testar o envio de email localmente antes de configurar no GitHub:
 
 ```python
 # Criar arquivo .env com:
-EMAIL_FROM=lucasgmartins04@gmail.com
+EMAIL_FROM=peixonaut01@gmail.com
 EMAIL_SMTP_HOST=smtp.gmail.com
 EMAIL_SMTP_PORT=587
-EMAIL_USER=lucasgmartins04@gmail.com
+EMAIL_USER=peixonaut01@gmail.com
 EMAIL_PASSWORD=sua-senha-de-app
 
 # Executar:
