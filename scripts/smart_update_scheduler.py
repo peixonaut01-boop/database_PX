@@ -30,17 +30,18 @@ except ImportError as exc:
 CALENDAR_API = "https://servicodados.ibge.gov.br/api/v3/calendario/"
 
 # Mapeamento de palavras-chave do calendário para datasets
+# Ordem importa: datasets mais específicos primeiro
 DATASET_KEYWORDS = {
+    'ipca15': ['IPCA-15', 'IPCA 15', 'Índice Nacional de Preços ao Consumidor Amplo 15'],
     'ipca': ['IPCA', 'Índice Nacional de Preços ao Consumidor Amplo'],
     'inpc': ['INPC', 'Índice Nacional de Preços ao Consumidor'],
-    'ipca15': ['IPCA-15', 'IPCA 15'],
     'ipp': ['IPP', 'Índice de Preços ao Produtor'],
-    'pimpf': ['PIM', 'Produção Industrial', 'PIM-PF'],
+    'pimpf': ['PIM-PF', 'PIM', 'Produção Industrial', 'Produção Física'],
     'pmc': ['PMC', 'Pesquisa Mensal de Comércio'],
     'pms': ['PMS', 'Pesquisa Mensal de Serviços'],
-    'pnadcm': ['PNAD', 'PNAD Contínua Mensal', 'pnadc1'],
-    'pnadct': ['PNAD', 'PNAD Contínua Trimestral', 'pnadc2'],
-    'lspa': ['LSPA', 'Levantamento Sistemático'],
+    'pnadct': ['PNAD Contínua Trimestral', 'pnadc2', 'Divulgação trimestral'],
+    'pnadcm': ['PNAD Contínua Mensal', 'pnadc1', 'Divulgação mensal'],
+    'lspa': ['LSPA', 'Levantamento Sistemático da Produção Agrícola'],
 }
 
 logging.basicConfig(
@@ -61,7 +62,8 @@ def fetch_calendar_week() -> List[Dict]:
         response.raise_for_status()
         data = response.json()
         
-        items = data.get('items', []) if isinstance(data, dict) else data
+        # API retorna lista diretamente ou objeto com 'items'
+        items = data if isinstance(data, list) else (data.get('items', []) if isinstance(data, dict) else [])
         
         # Filtrar eventos da semana atual
         today = datetime.now()
@@ -78,7 +80,8 @@ def fetch_calendar_week() -> List[Dict]:
                 event_date = datetime.strptime(date_str, "%d/%m/%Y %H:%M:%S")
                 if week_start <= event_date <= week_end:
                     week_events.append(event)
-            except:
+            except Exception as e:
+                logger.debug(f"Could not parse date '{date_str}': {e}")
                 continue
         
         return week_events
@@ -88,14 +91,18 @@ def fetch_calendar_week() -> List[Dict]:
 
 
 def detect_dataset_from_event(event: Dict) -> Optional[str]:
-    """Detecta qual dataset corresponde a um evento do calendário."""
+    """
+    Detecta qual dataset corresponde a um evento do calendário.
+    Verifica datasets na ordem definida (mais específicos primeiro).
+    """
     title = event.get('titulo', '').upper()
     produto = event.get('nome_produto', '').upper()
     desc = event.get('descricao', '').upper()
+    desc_produto = event.get('descricao_produto', '').upper()
     
-    text = f"{title} {produto} {desc}"
+    text = f"{title} {produto} {desc} {desc_produto}"
     
-    # Verificar cada dataset
+    # Verificar cada dataset na ordem (mais específicos primeiro)
     for dataset, keywords in DATASET_KEYWORDS.items():
         if any(kw.upper() in text for kw in keywords):
             return dataset
