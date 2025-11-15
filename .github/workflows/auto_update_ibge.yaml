@@ -1,0 +1,59 @@
+name: Auto Update - IBGE Datasets
+
+on:
+  schedule:
+    # Rodar diariamente às 10h BRT (13h UTC) para verificar datasets mensais
+    - cron: '0 13 * * *'
+  workflow_dispatch:  # Permitir execução manual
+
+jobs:
+  update-ibge:
+    runs-on: ubuntu-latest
+    name: Update IBGE Datasets
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    
+    - name: Update IPCA (high priority - published ~10th of month)
+      env:
+        FIREBASE_CREDENTIALS: ${{ secrets.FIREBASE_CREDENTIALS }}
+        FIREBASE_DATABASE_URL: ${{ secrets.FIREBASE_DATABASE_URL }}
+      if: github.event.schedule == '0 13 * * *' || github.event_name == 'workflow_dispatch'
+      run: |
+        python scripts/ingest_flat_series.py --dataset ipca --resume --workers 10
+    
+    - name: Update INPC (high priority - published ~10th of month)
+      env:
+        FIREBASE_CREDENTIALS: ${{ secrets.FIREBASE_CREDENTIALS }}
+        FIREBASE_DATABASE_URL: ${{ secrets.FIREBASE_DATABASE_URL }}
+      if: github.event.schedule == '0 13 * * *' || github.event_name == 'workflow_dispatch'
+      run: |
+        python scripts/ingest_flat_series.py --dataset inpc --resume --workers 10
+    
+    - name: Update IPCA15 (published ~15th of month)
+      env:
+        FIREBASE_CREDENTIALS: ${{ secrets.FIREBASE_CREDENTIALS }}
+        FIREBASE_DATABASE_URL: ${{ secrets.FIREBASE_DATABASE_URL }}
+      if: github.event.schedule == '0 13 * * *' || github.event_name == 'workflow_dispatch'
+      run: |
+        python scripts/ingest_flat_series.py --dataset ipca15 --resume --workers 10
+    
+    - name: Verify updates
+      env:
+        FIREBASE_CREDENTIALS: ${{ secrets.FIREBASE_CREDENTIALS }}
+        FIREBASE_DATABASE_URL: ${{ secrets.FIREBASE_DATABASE_URL }}
+      run: |
+        python scripts/verify_dataset_completeness.py ipca || true
+        python scripts/verify_dataset_completeness.py inpc || true
+

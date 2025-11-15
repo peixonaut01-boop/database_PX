@@ -7,9 +7,12 @@ import pandas as pd
 from io import BytesIO
 import traceback
 from urllib.parse import quote
+import re
+from datetime import datetime
+from typing import Optional
 
 # Firebase Realtime Database configuration
-FIREBASE_BASE_URL = 'https://peixo-28d2d-default-rtdb.firebaseio.com'
+FIREBASE_BASE_URL = 'https://peixonaut01-2e0ba-default-rtdb.firebaseio.com'
 
 
 def get_category_base_path(category: str) -> str:
@@ -65,7 +68,6 @@ def clean_column_name(col_name):
     Cleans a column name to be Firebase-compliant.
     Firebase keys cannot contain: . $ # [ ] / and some other characters.
     """
-    import re
     if pd.isna(col_name):
         return None
     
@@ -239,6 +241,86 @@ def clean_data_for_json(data):
         cleaned_data.append(cleaned_record)
     
     return cleaned_data
+
+
+def _normalize_date(date_str: str) -> Optional[str]:
+    """
+    Normalizes a variety of date string formats into 'YYYY-MM-DD'.
+    Handles quarterly and monthly formats.
+    """
+    if not isinstance(date_str, str):
+        return None
+
+    date_str = date_str.lower().strip()
+
+    # Handle "1º trimestre 2023" -> "2023-03-01" (end of quarter)
+    quarter_match = re.match(r"(\d)[ºo]?\s+trimestre\s+(\d{4})", date_str)
+    if quarter_match:
+        quarter = int(quarter_match.group(1))
+        year = int(quarter_match.group(2))
+        month = quarter * 3
+        return f"{year}-{month:02d}-01"
+
+    # Handle "janeiro de 2023" -> "2023-01-01"
+    month_map = {
+        "janeiro": 1, "fevereiro": 2, "março": 3, "abril": 4, "maio": 5, "junho": 6,
+        "julho": 7, "agosto": 8, "setembro": 9, "outubro": 10, "novembro": 11, "dezembro": 12
+    }
+    for month_name, month_num in month_map.items():
+        if month_name in date_str:
+            year_match = re.search(r"(\d{4})", date_str)
+            if year_match:
+                year = int(year_match.group(1))
+                return f"{year}-{month_num:02d}-01"
+
+    # Fallback for other formats, assuming it might be something parsable
+    try:
+        # Example: "2023-01-01", "01/01/2023"
+        dt = pd.to_datetime(date_str, errors='coerce')
+        if pd.notna(dt):
+            return dt.strftime('%Y-%m-%d')
+    except (ValueError, TypeError):
+        pass
+
+    return None
+
+
+def upload_table_data_keyed_by_date(
+    df: pd.DataFrame,
+    date_column: str,
+    table_number: int,
+    table_name: str,
+    period_range: Optional[str] = None,
+    category: str = 'cnt'
+) -> bool:
+    """
+    Uploads table data to Firebase, using normalized dates as primary keys.
+    """
+    print(f"\n2. Uploading table {table_number} to Firebase (keyed by date)")
+    print(f"   Table: {table_name}")
+
+    if date_column not in df.columns:
+        print(f"[ERROR] Date column '{date_column}' not found in DataFrame.")
+        return False
+
+    # Normalize the date column and set it as the index
+    df['normalized_date'] = df[date_column].apply(_normalize_date)
+    df.dropna(subset=['normalized_date'], inplace=True)
+    df.set_index('normalized_date', inplace=True)
+    df.drop(columns=[date_column], inplace=True)
+
+    # Convert the DataFrame to a dictionary with date keys
+    data_dict = df.to_dict(orient='index')
+
+    # Proceed with the upload
+    base_path = get_category_base_path(category)
+    data_path = f'{base_path}/table_{table_number}/data'
+    data_success = upload_to_firebase_path(data_dict, data_path)
+
+    # Upload metadata
+    metadata_success = upload_metadata(table_number, table_name, period_range, category=category)
+
+    return data_success and metadata_success
 
 
 def upload_to_firebase_path(data, firebase_path):

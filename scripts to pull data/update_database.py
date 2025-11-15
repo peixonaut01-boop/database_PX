@@ -153,6 +153,50 @@ TABLE_REGISTRY: Dict[CategoryKey, Dict[str, object]] = {
             ),
         },
     },
+    'ipca': {
+        'label': 'IPCA (Consumer Price Index)',
+        'workflow': REPO_ROOT / '.github/workflows/update_ibge_ipca.yaml',
+        'run_all': 'ingest_ipca_tables.py',
+        'verify': None,
+        'tables': {
+            '118': TableInfo(
+                script='ingest_ipca_tables.py',
+                description='Table 118 - Seasonally adjusted IPCA',
+            ),
+            '1737': TableInfo(
+                script='ingest_ipca_tables.py',
+                description='Table 1737 - Historical series with index and variations',
+            ),
+            '6691': TableInfo(
+                script='ingest_ipca_tables.py',
+                description='Table 6691 - Historical series with index and variations from Nov 2014',
+            ),
+            '7060': TableInfo(
+                script='ingest_ipca_tables.py',
+                description='Table 7060 - Monthly variation and weight by groups/items',
+            ),
+            '7061': TableInfo(
+                script='ingest_ipca_tables.py',
+                description='Table 7061 - Seasonally adjusted variation by groups/items',
+            ),
+             'all': TableInfo(
+                script='ingest_ipca_tables.py',
+                description='All configured IPCA tables',
+            ),
+        },
+    },
+    'lspa': {
+        'label': 'LSPA (Systematic Survey of Agricultural Production)',
+        'workflow': REPO_ROOT / '.github/workflows/update_ibge_lspa.yaml',
+        'run_all': 'ingest_lspa_tables.py',
+        'verify': None,
+        'tables': {
+            'all': TableInfo(
+                script='ingest_lspa_tables.py',
+                description='All configured LSPA tables',
+            ),
+        },
+    },
     'ipp': {
         'label': 'IPP (Producer Price Index)',
         'workflow': REPO_ROOT / '.github/workflows/update_ibge_ipp.yaml',

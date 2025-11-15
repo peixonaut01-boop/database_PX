@@ -7,3 +7,7 @@ matplotlib
 seaborn
 SQLAlchemy
 openpyxl
+firebase-admin
+fastapi
+uvicorn[standard]
+sidrapy

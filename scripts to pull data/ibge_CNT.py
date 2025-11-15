@@ -1,7 +1,7 @@
 """
 Script to fetch IBGE Table 1620: Série encadeada do índice de volume trimestral (Base: média 1995 = 100)
 """
-from ibge_base import fetch_ibge_data, clean_and_structure_data, upload_table_data
+from ibge_base import fetch_ibge_data, clean_and_structure_data, upload_table_data_keyed_by_date
 
 # --- Configuration ---
 
@@ -30,8 +30,14 @@ def fetch_and_upload_ibge_data():
         df = clean_and_structure_data(df, sector_names)
         print(f"Data ready for upload: {len(df)} records.")
         
-        # Upload to Firebase with nested structure
-        success = upload_table_data(df, TABLE_NUMBER, TABLE_NAME, PERIOD_RANGE)
+        # Upload to Firebase with date keys
+        success = upload_table_data_keyed_by_date(
+            df,
+            date_column='Trimestre',
+            table_number=TABLE_NUMBER,
+            table_name=TABLE_NAME,
+            period_range=PERIOD_RANGE
+        )
         
         if not success:
             print("[ERROR] Failed to upload data to Firebase.")

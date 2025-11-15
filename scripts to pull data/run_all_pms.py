@@ -12,6 +12,8 @@ PMS_SCRIPTS = [
     'ibge_5906_volume.py',   # Table 5906 - Volume - 6 sheets
     'ibge_8163.py',          # Table 8163 - Receita & Volume by segments
     'ibge_8688.py',          # Table 8688 - Receita & Volume by activities
+    'ibge_8694.py',          # Table 8694 - Atividades turísticas (agregado)
+    'ibge_8695.py',          # Table 8695 - Transporte de passageiros/cargas
 ]
 
 def run_script(script_name):
