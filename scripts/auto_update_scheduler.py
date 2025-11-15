@@ -221,18 +221,31 @@ def update_dataset(dataset: str) -> bool:
         # (comparar última data no Firebase com última data disponível na API)
         # Por enquanto, vamos atualizar todas
         
-        # Usar ingest_flat_series com --resume para atualizar apenas novas/mudadas
-        from scripts.ingest_flat_series import main as ingest_main
+        # Usar versão INCREMENTAL - muito mais rápida!
+        # Busca apenas novos dados desde última atualização
+        from scripts.ingest_flat_series_incremental import main as incremental_main
         import sys as sys_module
         
         # Simular argumentos
         original_argv = sys_module.argv
-        sys_module.argv = ['ingest_flat_series.py', '--dataset', dataset, '--resume', '--workers', '10']
+        sys_module.argv = ['ingest_flat_series_incremental.py', '--dataset', dataset, '--workers', '10']
         
         try:
-            ingest_main()
-            logger.info(f"Successfully updated dataset: {dataset}")
+            incremental_main()
+            logger.info(f"Successfully updated dataset: {dataset} (incremental)")
             return True
+        except Exception as e:
+            logger.warning(f"Incremental update failed, trying full update: {e}")
+            # Fallback para versão completa se incremental falhar
+            from scripts.ingest_flat_series import main as full_main
+            sys_module.argv = ['ingest_flat_series.py', '--dataset', dataset, '--resume', '--workers', '10']
+            try:
+                full_main()
+                logger.info(f"Successfully updated dataset: {dataset} (full)")
+                return True
+            except Exception as e2:
+                logger.error(f"Full update also failed: {e2}")
+                return False
         finally:
             sys_module.argv = original_argv
         
