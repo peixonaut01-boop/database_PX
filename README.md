@@ -2,6 +2,20 @@
 
 Pipeline and tooling for collecting IBGE datasets (CNT, PMS, PMC, PNADCT, PNADCM, IPP), pushing them to Firebase, and validating the results.
 
+## 📋 Roadmap
+
+Para ver o roadmap completo de desenvolvimento, consulte:
+- **[ROADMAP.md](ROADMAP.md)** - Roadmap detalhado por fases
+- **[ROADMAP_SUMMARY.md](ROADMAP_SUMMARY.md)** - Resumo executivo
+
+## 📊 Status Atual
+
+- ✅ **123,574 séries catalogadas** em formato flat otimizado
+- ✅ **9/10 datasets IBGE completos** (99%+ de cobertura)
+- ⚠️ **LSPA:** 84.5% completo (2,587 séries Safra 2024/2025 bloqueadas pelo IBGE)
+- ⚠️ **PNADCT:** 99.99% completo (5 séries com erros de conexão)
+- 🚧 **RTN (Tesouro Transparente):** Em desenvolvimento
+
 ## Repository layout
 
 - `scripts to pull data/`: ingestion scripts, shared utilities, and operational helpers.
@@ -71,4 +85,16 @@ Key utilities in `scripts to pull data/`:
 - `reset_firebase_structure.py`: rebuild Firebase scaffolding (use with caution).
 - `summarize_status.py`, `usage_summary_generator.py`: regenerate operational dashboards.
 
-Refer to each script’s docstring for extra usage notes.
+Refer to each script's docstring for extra usage notes.
+
+## 📚 Documentação Adicional
+
+- **[CHANGELOG.md](CHANGELOG.md)** - Histórico de mudanças
+- **[ROADMAP.md](ROADMAP.md)** - Roadmap de desenvolvimento
+- **[ROADMAP_SUMMARY.md](ROADMAP_SUMMARY.md)** - Resumo executivo do roadmap
+
+## 🤝 Contribuindo
+
+Veja o [ROADMAP.md](ROADMAP.md) para entender as prioridades atuais e como contribuir.
+
+Para reportar bugs ou sugerir features, use os templates de issues do GitHub.
