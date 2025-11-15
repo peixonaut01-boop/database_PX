@@ -201,52 +201,81 @@ def update_dataset_prioritized(dataset: str, national_first: bool = True, worker
         total_failed = 0
         failed_records = []
         
-        def update_series_values_only(record, phase_name):
-            """Atualiza apenas os valores, mantendo metadata intacta."""
+        def update_series_values_only(record, phase_name, max_retries=3):
+            """Atualiza apenas os valores, mantendo metadata intacta. Retry até 3 vezes."""
             nonlocal total_updated, total_failed
             px_code = record['px_code']
             api_url = record['api_url']
             
-            try:
-                # Buscar TODA a série histórica da API
-                new_values, _ = fetch_series_data(api_url)
-                
-                # Buscar dados existentes no Firebase
-                ref = get_reference(f"flat_series/{px_code}")
-                existing_data = ref.get()
-                
-                if existing_data is None:
-                    # Série não existe - criar completa
-                    from scripts.ingest_flat_series import ingest_record
-                    ok, msg = ingest_record(record, dry_run=False)
-                    with print_lock:
+            last_error = None
+            for attempt in range(1, max_retries + 1):
+                try:
+                    # Buscar TODA a série histórica da API
+                    new_values, _ = fetch_series_data(api_url)
+                    
+                    # Buscar dados existentes no Firebase
+                    ref = get_reference(f"flat_series/{px_code}")
+                    existing_data = ref.get()
+                    
+                    if existing_data is None:
+                        # Série não existe - criar completa
+                        from scripts.ingest_flat_series import ingest_record
+                        ok, msg = ingest_record(record, dry_run=False)
                         if ok:
-                            total_updated += 1
-                            logger.debug(f"    [{phase_name}] {px_code} - Created: {msg}")
+                            with print_lock:
+                                total_updated += 1
+                                if attempt > 1:
+                                    logger.info(f"    [{phase_name}] {px_code} - Created after {attempt} attempts: {msg}")
+                                else:
+                                    logger.debug(f"    [{phase_name}] {px_code} - Created: {msg}")
+                            return True
                         else:
+                            last_error = msg
+                            if attempt < max_retries:
+                                logger.debug(f"    [{phase_name}] {px_code} - Attempt {attempt}/{max_retries} failed: {msg}, retrying...")
+                                continue
+                            else:
+                                with print_lock:
+                                    total_failed += 1
+                                    failed_records.append({'px_code': px_code, 'error': f"Failed after {max_retries} attempts: {msg}"})
+                                    logger.warning(f"    [{phase_name}] {px_code} - Failed after {max_retries} attempts: {msg}")
+                                return False
+                    
+                    # Série existe - atualizar APENAS valores (manter metadata)
+                    existing_data['values'] = new_values
+                    ref.set(existing_data)
+                    
+                    with print_lock:
+                        total_updated += 1
+                        if attempt > 1:
+                            logger.info(f"    [{phase_name}] {px_code} - Updated after {attempt} attempts: {len(new_values)} values")
+                        else:
+                            logger.debug(f"    [{phase_name}] {px_code} - Updated {len(new_values)} values")
+                    return True
+                    
+                except Exception as e:
+                    last_error = str(e)
+                    if attempt < max_retries:
+                        logger.debug(f"    [{phase_name}] {px_code} - Attempt {attempt}/{max_retries} failed: {e}, retrying...")
+                        continue
+                    else:
+                        with print_lock:
                             total_failed += 1
-                            failed_records.append({'px_code': px_code, 'error': msg})
-                            logger.warning(f"    [{phase_name}] {px_code} - {msg}")
-                    return ok
-                
-                # Série existe - atualizar APENAS valores (manter metadata)
-                existing_data['values'] = new_values
-                ref.set(existing_data)
-                
-                with print_lock:
-                    total_updated += 1
-                    logger.debug(f"    [{phase_name}] {px_code} - Updated {len(new_values)} values")
-                return True
-                
-            except Exception as e:
-                with print_lock:
-                    total_failed += 1
-                    failed_records.append({
-                        'px_code': px_code,
-                        'error': str(e)
-                    })
-                    logger.error(f"    [{phase_name}] {px_code} - {e}")
-                return False
+                            failed_records.append({
+                                'px_code': px_code,
+                                'error': f"Failed after {max_retries} attempts: {last_error}"
+                            })
+                            logger.error(f"    [{phase_name}] {px_code} - Failed after {max_retries} attempts: {last_error}")
+                        return False
+            
+            # Se chegou aqui, todas as tentativas falharam
+            with print_lock:
+                total_failed += 1
+                failed_records.append({
+                    'px_code': px_code,
+                    'error': f"Failed after {max_retries} attempts: {last_error}"
+                })
+            return False
         
         def process_record(record, phase_name):
             return update_series_values_only(record, phase_name)
