@@ -34,8 +34,11 @@ except ImportError as exc:
 CALENDAR_API = "https://servicodados.ibge.gov.br/api/v3/calendario/"
 
 # Email configuration
-EMAIL_RECIPIENTS = ["lucasgmartins04@gmail.com"]  # Lista de destinatários
-EMAIL_FROM = os.getenv("EMAIL_FROM", "noreply@peixonaut.com")
+EMAIL_RECIPIENTS = [
+    "lucasgmartins04@gmail.com",
+    "macro@vitorvidalconsulting.com"
+]  # Lista de destinatários
+EMAIL_FROM = os.getenv("EMAIL_FROM", "peixonaut01@gmail.com")
 EMAIL_SMTP_HOST = os.getenv("EMAIL_SMTP_HOST", "smtp.gmail.com")
 EMAIL_SMTP_PORT = int(os.getenv("EMAIL_SMTP_PORT", "587"))
 EMAIL_USER = os.getenv("EMAIL_USER", "")
