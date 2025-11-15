@@ -25,12 +25,12 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
     
-    - name: Update BACEN datasets (incremental - fast!)
+    - name: Update BACEN datasets (with vintage detection)
       env:
         FIREBASE_CREDENTIALS: ${{ secrets.FIREBASE_CREDENTIALS }}
         FIREBASE_DATABASE_URL: ${{ secrets.FIREBASE_DATABASE_URL }}
       run: |
-        python scripts/ingest_flat_series_incremental.py --dataset bacen --workers 10
+        python scripts/ingest_flat_series_with_vintages.py --dataset bacen --resume --workers 10
     
     - name: Verify update
       env:

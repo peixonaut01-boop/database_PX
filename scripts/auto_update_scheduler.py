@@ -221,30 +221,30 @@ def update_dataset(dataset: str) -> bool:
         # (comparar última data no Firebase com última data disponível na API)
         # Por enquanto, vamos atualizar todas
         
-        # Usar versão INCREMENTAL - muito mais rápida!
-        # Busca apenas novos dados desde última atualização
-        from scripts.ingest_flat_series_incremental import main as incremental_main
+        # Usar versão COM VINTAGES - busca série completa e detecta revisões
+        # Importante: sempre buscar série completa para comparar vintages
+        from scripts.ingest_flat_series_with_vintages import main as vintages_main
         import sys as sys_module
         
         # Simular argumentos
         original_argv = sys_module.argv
-        sys_module.argv = ['ingest_flat_series_incremental.py', '--dataset', dataset, '--workers', '10']
+        sys_module.argv = ['ingest_flat_series_with_vintages.py', '--dataset', dataset, '--resume', '--workers', '10']
         
         try:
-            incremental_main()
-            logger.info(f"Successfully updated dataset: {dataset} (incremental)")
+            vintages_main()
+            logger.info(f"Successfully updated dataset: {dataset} (with vintage detection)")
             return True
         except Exception as e:
-            logger.warning(f"Incremental update failed, trying full update: {e}")
-            # Fallback para versão completa se incremental falhar
-            from scripts.ingest_flat_series import main as full_main
+            logger.error(f"Update with vintages failed: {e}", exc_info=True)
+            # Fallback para versão básica se falhar
+            from scripts.ingest_flat_series import main as basic_main
             sys_module.argv = ['ingest_flat_series.py', '--dataset', dataset, '--resume', '--workers', '10']
             try:
-                full_main()
-                logger.info(f"Successfully updated dataset: {dataset} (full)")
+                basic_main()
+                logger.warning(f"Fell back to basic update (no vintage detection)")
                 return True
             except Exception as e2:
-                logger.error(f"Full update also failed: {e2}")
+                logger.error(f"Basic update also failed: {e2}")
                 return False
         finally:
             sys_module.argv = original_argv

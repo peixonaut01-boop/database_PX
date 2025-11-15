@@ -7,6 +7,14 @@
 - Respeita frequências de publicação (diária, mensal, trimestral)
 - Prioriza séries críticas
 - Retry automático para falhas
+- ⚡ **Usa atualização INCREMENTAL** - 10-100x mais rápido!
+
+### 1.1. **Detecção de Vintages** (`scripts/ingest_flat_series_with_vintages.py`)
+- 📊 **Detecta Revisões**: Compara série completa com versão anterior
+- 🔍 **Identifica Mudanças**: Novos períodos, remoções, e revisões de valores
+- 💾 **Armazena Histórico**: Salva vintages (versões anteriores) para análise
+- ⚠️ **Busca Série Completa**: Necessário para detectar revisões históricas
+- 📈 **Análise de Qualidade**: Permite rastrear padrões de revisão
 
 ### 2. **Workflows GitHub Actions**
 

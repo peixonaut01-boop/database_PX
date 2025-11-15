@@ -61,25 +61,36 @@ O script `auto_update_scheduler.py`:
 1. **Verifica Calendário**: Determina quais datasets devem ser atualizados hoje
 2. **Verifica Prioridade**: Ordena por importância (high > medium > low)
 3. **Verifica Retry**: Se está em dia de retry, verifica se última atualização falhou
-4. **Executa Atualização INCREMENTAL**: ⚡ **MUITO MAIS RÁPIDO!**
-   - Usa `ingest_flat_series_incremental.py`
-   - Busca apenas novos dados desde última atualização
-   - Não re-baixa série histórica completa
-   - Mescla novos dados com existentes
+4. **Executa Atualização COM VINTAGES**: 📊 **Detecta Revisões!**
+   - Usa `ingest_flat_series_with_vintages.py`
+   - Busca série completa (necessário para comparar vintages)
+   - Compara com versão anterior no Firebase
+   - Detecta: novos períodos, remoções, e revisões de valores
+   - Salva vintages (versões anteriores) para análise histórica
 5. **Registra Resultados**: Salva logs e resultados em JSON
 
-### ⚡ Otimização Incremental
+### 📊 Detecção de Vintages (Revisões)
 
-**Por que é mais rápido?**
-- **Antes**: Re-baixava todas as séries toda vez (ex: 50 anos de IPCA = milhares de pontos)
-- **Agora**: Busca apenas novos períodos (ex: 1 mês novo = 1 ponto)
-- **Ganho**: 10-100x mais rápido dependendo do tamanho da série
+**Por que buscar série completa?**
+- Dados econômicos são frequentemente **revisados** pelo IBGE
+- Exemplo: IPCA de janeiro pode ser 0.54% inicialmente, depois revisado para 0.56%
+- Precisamos comparar série completa para detectar essas revisões
+- Vintages permitem análise de qualidade e rastreabilidade
 
 **Como funciona:**
-1. Verifica última data no Firebase
-2. Modifica URL SIDRA para buscar apenas períodos após essa data
-3. Mescla novos dados com existentes
-4. Atualiza Firebase apenas com dados novos
+1. Busca série completa da API SIDRA
+2. Compara com versão anterior no Firebase
+3. Detecta mudanças: added, removed, changed
+4. Salva versão anterior como vintage antes de atualizar
+5. Atualiza Firebase com nova versão + metadata de comparação
+
+**Estrutura no Firebase:**
+```
+flat_series/{px_code}/
+  - values: {versão atual}
+  - metadata: {inclui vintage_comparison}
+  - vintages/: {histórico de versões anteriores}
+```
 
 ## Configuração
 
