@@ -15,7 +15,8 @@ Transformar o Peixonaut01 em uma plataforma completa de dados macroeconômicos b
 ### ⚠️ Pendências Críticas
 - 5 séries PNADCT faltantes (erros de conexão)
 - 2,587 séries LSPA (Safra 2024/2025 bloqueadas pelo IBGE)
-- Ingestão RTN (Tesouro Transparente) iniciada mas não finalizada
+- Ingestão STN (RTN - Tesouro Transparente) iniciada mas não finalizada
+- Ingestão BACEN (Banco Central) não iniciada
 
 ---
 
@@ -24,15 +25,16 @@ Transformar o Peixonaut01 em uma plataforma completa de dados macroeconômicos b
 ### Q4 2025 (Nov-Dez)
 **Foco: Finalização e Estabilização**
 - Completar ingestão IBGE
-- Finalizar ingestão RTN
+- **Finalizar ingestão STN (RTN)** 🔴
 - Melhorar API FastAPI
 - Documentação básica
 
 ### Q1 2026 (Jan-Mar)
 **Foco: Expansão**
-- Novas fontes de dados (BACEN, ANP, IPEA)
+- **Ingestão completa de dados do BACEN** 🔴
 - Sistema de atualização automática
 - Melhorias na estrutura de dados
+- Outras fontes (ANP, IPEA) - opcional
 
 ### Q2 2026 (Abr-Jun)
 **Foco: Qualidade**
@@ -53,7 +55,9 @@ Transformar o Peixonaut01 em uma plataforma completa de dados macroeconômicos b
 | Métrica | Atual | Meta Q4 2025 | Meta Q1 2026 |
 |---------|-------|--------------|--------------|
 | Séries IBGE Ingeridas | 99.99% | 100%* | 100%* |
-| Novas Fontes de Dados | 1 (IBGE) | 2 (IBGE + RTN) | 5+ |
+| Fontes de Dados | 1 (IBGE) | 2 (IBGE + STN) | 3+ (IBGE + STN + BACEN) |
+| Séries STN (RTN) | 0 | 27 tabelas | 27 tabelas (atualizado mensalmente) |
+| Séries BACEN | 0 | 0 | 50+ séries principais |
 | Endpoints API | 4 | 8+ | 15+ |
 | Cobertura de Testes | ~10% | 40% | 70% |
 | Uptime API | N/A | 95% | 99.9% |
@@ -89,7 +93,8 @@ Transformar o Peixonaut01 em uma plataforma completa de dados macroeconômicos b
 |-------|-------------|---------|-----------|
 | IBGE bloqueia acesso | Média | Alto | Rate limiting, retry com backoff |
 | Firebase costs aumentam | Alta | Médio | Otimização de storage, arquivo de dados antigos |
-| Dados RTN mudam formato | Baixa | Médio | Parser flexível, validação robusta |
+| Dados STN/RTN mudam formato | Baixa | Médio | Parser flexível, validação robusta |
+| BACEN API instável | Média | Médio | Retry automático, cache local |
 | API sobrecarga | Média | Médio | Cache, rate limiting, CDN |
 
 ---
@@ -98,16 +103,19 @@ Transformar o Peixonaut01 em uma plataforma completa de dados macroeconômicos b
 
 1. **Esta Semana:**
    - [ ] Resolver 5 séries PNADCT faltantes
-   - [ ] Finalizar parser RTN
+   - [ ] Finalizar parser STN (RTN)
    - [ ] Adicionar 3 novos endpoints na API
 
 2. **Próximas 2 Semanas:**
-   - [ ] Completar ingestão RTN
+   - [ ] Completar ingestão STN (RTN) - 27 tabelas
+   - [ ] Iniciar análise e mapeamento de séries BACEN
    - [ ] Documentação básica da API
    - [ ] Setup de monitoramento básico
 
 3. **Próximo Mês:**
-   - [ ] Sistema de atualização automática
+   - [ ] Desenvolver scripts de ingestão BACEN
+   - [ ] Implementar atualização automática BACEN
+   - [ ] Sistema de atualização automática geral
    - [ ] Testes unitários básicos
    - [ ] CI/CD pipeline
 

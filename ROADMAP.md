@@ -48,29 +48,40 @@
   - Relatório de integridade dos dados
   - Verificação de gaps temporais
 
-### 1.2 Ingestão de Dados do Tesouro Transparente (RTN)
-**Prioridade:** 🟡 Média  
+### 1.2 Ingestão de Dados do STN (Secretaria do Tesouro Nacional) - RTN
+**Prioridade:** 🔴 Alta  
 **Estimativa:** 2-3 semanas
+
+**Objetivo: Ingerir dados do Boletim Resultado do Tesouro Nacional (RTN) mensalmente**
 
 - [ ] **Scraping Automatizado**
   - Finalizar script de download automático do Excel RTN
   - Implementar detecção de novos boletins mensais
-  - Tratamento de diferentes formatos de tabelas
+  - Tratamento de diferentes formatos de tabelas (27 tabelas identificadas)
+  - Integração com API do Tesouro Transparente
 
 - [ ] **Parser de Tabelas Excel**
-  - Extrair dados de todas as 27 tabelas identificadas
+  - Extrair dados de todas as 27 tabelas identificadas:
+    - Resultado Primário (valores correntes e % PIB)
+    - Investimento do Governo Central
+    - Custeio Administrativo
+    - Transferências e despesas
+    - Valores a preços constantes
+    - Demonstrativos de operações
   - Normalizar estrutura de dados
   - Mapear para formato flat_series
 
 - [ ] **Ingestão no Firebase**
-  - Adaptar `ingest_flat_series.py` para dados do Tesouro
-  - Criar dataset "rtn" no catálogo
+  - Adaptar `ingest_flat_series.py` para dados do STN
+  - Criar dataset "stn" ou "rtn" no catálogo
   - Implementar atualização mensal automática
+  - Tratamento de séries históricas
 
 - [ ] **Validação e Testes**
   - Comparar dados extraídos com fonte original
   - Testes de integridade
   - Documentação do processo
+  - Verificação de consistência temporal
 
 ### 1.3 Melhorias na API FastAPI
 **Prioridade:** 🟡 Média  
@@ -96,14 +107,47 @@
 
 ## 🚀 Fase 2: Expansão e Novas Funcionalidades (Sprint 3-4)
 
-### 2.1 Novas Fontes de Dados
-**Prioridade:** 🟢 Baixa  
+### 2.1 Ingestão de Dados do BACEN (Banco Central do Brasil)
+**Prioridade:** 🔴 Alta  
 **Estimativa:** 3-4 semanas
 
-- [ ] **BACEN (Banco Central)**
-  - Taxa Selic, CDI, IGP-M
-  - Séries de câmbio
-  - Indicadores financeiros
+**Objetivo: Ingerir séries históricas e indicadores financeiros do Banco Central**
+
+- [ ] **Análise da API/SIDRA do BACEN**
+  - Identificar endpoints disponíveis
+  - Mapear séries de interesse:
+    - Taxa Selic (meta e efetiva)
+    - CDI (Certificado de Depósito Interbancário)
+    - IGP-M (Índice Geral de Preços - Mercado)
+    - Taxa de câmbio (dólar, euro, outras moedas)
+    - Reservas internacionais
+    - Base monetária
+    - Meios de pagamento (M1, M2, M3, M4)
+    - Dívida líquida do setor público
+    - Indicadores de crédito
+  - Documentar estrutura de dados
+
+- [ ] **Desenvolvimento de Scripts de Ingestão**
+  - Criar `scripts/ingest_bacen_series.py`
+  - Implementar parser para diferentes formatos de dados
+  - Tratamento de frequências (diária, semanal, mensal)
+  - Normalização de datas e valores
+
+- [ ] **Integração com Firebase**
+  - Adaptar para estrutura flat_series
+  - Criar dataset "bacen" no catálogo
+  - Implementar atualização automática (frequência variável por série)
+  - Tratamento de atualizações intraday (para séries diárias)
+
+- [ ] **Validação e Monitoramento**
+  - Comparação com dados oficiais
+  - Alertas para falhas de atualização
+  - Verificação de consistência temporal
+  - Documentação completa
+
+### 2.2 Outras Fontes de Dados (Futuro)
+**Prioridade:** 🟢 Baixa  
+**Estimativa:** 3-4 semanas
 
 - [ ] **ANP (Agência Nacional do Petróleo)**
   - Preços de combustíveis
@@ -113,7 +157,7 @@
   - Séries históricas consolidadas
   - Indicadores econômicos
 
-### 2.2 Sistema de Atualização Automática
+### 2.3 Sistema de Atualização Automática
 **Prioridade:** 🟡 Média  
 **Estimativa:** 2 semanas
 
@@ -132,7 +176,7 @@
   - Métricas de performance
   - Logs estruturados
 
-### 2.3 Melhorias na Estrutura de Dados
+### 2.4 Melhorias na Estrutura de Dados
 **Prioridade:** 🟡 Média  
 **Estimativa:** 1-2 semanas
 
@@ -253,9 +297,10 @@
 ## 🎯 Prioridades Imediatas (Próximas 2 Semanas)
 
 1. **Resolver 5 séries PNADCT faltantes** ⚡
-2. **Finalizar scraping e ingestão RTN** ⚡
-3. **Melhorar endpoints da API** ⚡
-4. **Documentação básica da API** 📝
+2. **Finalizar scraping e ingestão STN (RTN)** ⚡
+3. **Iniciar ingestão de dados do BACEN** ⚡
+4. **Melhorar endpoints da API** ⚡
+5. **Documentação básica da API** 📝
 
 ---
 
@@ -263,11 +308,13 @@
 
 ### Fase 1
 - ✅ 100% das séries IBGE ingeridas (exceto bloqueios conhecidos)
-- ✅ RTN mensal automatizado
+- ✅ STN (RTN) mensal automatizado
+- ✅ BACEN com principais séries ingeridas
 - ✅ API com 5+ endpoints funcionais
 
 ### Fase 2
-- ✅ 3+ novas fontes de dados integradas
+- ✅ BACEN completamente integrado
+- ✅ STN (RTN) funcionando com atualização mensal
 - ✅ Sistema de atualização automática funcionando
 - ✅ 99.9% uptime da API
 
