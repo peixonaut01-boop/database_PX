@@ -10,8 +10,12 @@ Sistema inteligente de atualização baseado no calendário IBGE.
 
 import json
 import logging
+import os
+import smtplib
 import sys
 from datetime import datetime, timedelta
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
@@ -28,6 +32,14 @@ except ImportError as exc:
     raise SystemExit(f"Unable to import required modules: {exc}") from exc
 
 CALENDAR_API = "https://servicodados.ibge.gov.br/api/v3/calendario/"
+
+# Email configuration
+EMAIL_RECIPIENTS = ["lucasgmartins04@gmail.com"]  # Lista de destinatários
+EMAIL_FROM = os.getenv("EMAIL_FROM", "noreply@peixonaut.com")
+EMAIL_SMTP_HOST = os.getenv("EMAIL_SMTP_HOST", "smtp.gmail.com")
+EMAIL_SMTP_PORT = int(os.getenv("EMAIL_SMTP_PORT", "587"))
+EMAIL_USER = os.getenv("EMAIL_USER", "")
+EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD", "")
 
 # Mapeamento de palavras-chave do calendário para datasets
 # Ordem importa: datasets mais específicos primeiro
@@ -250,6 +262,132 @@ def update_dataset_prioritized(dataset: str, national_first: bool = True, worker
         return False
 
 
+def create_email_html(releases: Dict[str, List[Dict]], results: Optional[Dict[str, bool]] = None) -> str:
+    """Cria template HTML para o email do calendário."""
+    today = datetime.now()
+    week_start = today - timedelta(days=today.weekday())
+    week_end = week_start + timedelta(days=7)
+    
+    week_str = f"{week_start.strftime('%d/%m/%Y')} a {week_end.strftime('%d/%m/%Y')}"
+    
+    html = f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <style>
+            body {{ font-family: Arial, sans-serif; line-height: 1.6; color: #333; }}
+            .container {{ max-width: 800px; margin: 0 auto; padding: 20px; }}
+            .header {{ background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; border-radius: 10px 10px 0 0; }}
+            .content {{ background: #f9f9f9; padding: 30px; border-radius: 0 0 10px 10px; }}
+            .dataset {{ background: white; margin: 15px 0; padding: 20px; border-radius: 8px; border-left: 4px solid #667eea; }}
+            .dataset h3 {{ margin-top: 0; color: #667eea; }}
+            .event {{ margin: 10px 0; padding: 10px; background: #f0f0f0; border-radius: 5px; }}
+            .event-date {{ color: #666; font-size: 0.9em; }}
+            .status {{ display: inline-block; padding: 5px 15px; border-radius: 20px; font-size: 0.85em; font-weight: bold; }}
+            .status-success {{ background: #d4edda; color: #155724; }}
+            .status-failed {{ background: #f8d7da; color: #721c24; }}
+            .status-pending {{ background: #fff3cd; color: #856404; }}
+            .summary {{ background: white; padding: 20px; margin: 20px 0; border-radius: 8px; }}
+            .footer {{ text-align: center; margin-top: 30px; color: #666; font-size: 0.9em; }}
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <h1>📅 Calendário de Atualizações IBGE</h1>
+                <p>Semana: {week_str}</p>
+            </div>
+            <div class="content">
+                <h2>Divulgações Detectadas</h2>
+    """
+    
+    for dataset, events in releases.items():
+        status_html = ""
+        if results and dataset in results:
+            status = "status-success" if results[dataset] else "status-failed"
+            status_text = "✓ Atualizado" if results[dataset] else "✗ Falhou"
+            status_html = f'<span class="status {status}">{status_text}</span>'
+        else:
+            status_html = '<span class="status status-pending">⏳ Pendente</span>'
+        
+        html += f"""
+                <div class="dataset">
+                    <h3>{dataset.upper()} {status_html}</h3>
+        """
+        
+        for event in events:
+            titulo = event.get('titulo', 'N/A')
+            data = event.get('data_divulgacao', 'N/A')
+            html += f"""
+                    <div class="event">
+                        <strong>{titulo}</strong>
+                        <div class="event-date">📆 {data}</div>
+                    </div>
+            """
+        
+        html += "</div>"
+    
+    html += """
+                <div class="summary">
+                    <h3>📊 Resumo</h3>
+                    <p><strong>Total de datasets:</strong> """ + str(len(releases)) + """</p>
+                    <p><strong>Total de eventos:</strong> """ + str(sum(len(v) for v in releases.values())) + """</p>
+    """
+    
+    if results:
+        success_count = sum(1 for v in results.values() if v)
+        html += f"""
+                    <p><strong>Atualizações bem-sucedidas:</strong> {success_count}/{len(results)}</p>
+        """
+    
+    html += """
+                </div>
+            </div>
+            <div class="footer">
+                <p>Este é um email automático do sistema de atualização Peixonaut.</p>
+                <p>Gerado em """ + datetime.now().strftime("%d/%m/%Y %H:%M:%S") + """</p>
+            </div>
+        </div>
+    </body>
+    </html>
+    """
+    
+    return html
+
+
+def send_calendar_email(releases: Dict[str, List[Dict]], results: Optional[Dict[str, bool]] = None) -> bool:
+    """Envia email com o calendário de atualizações."""
+    if not EMAIL_USER or not EMAIL_PASSWORD:
+        logger.warning("Email credentials not configured. Skipping email send.")
+        return False
+    
+    try:
+        # Criar mensagem
+        msg = MIMEMultipart('alternative')
+        msg['Subject'] = f"📅 Calendário IBGE - Semana {datetime.now().strftime('%d/%m/%Y')}"
+        msg['From'] = EMAIL_FROM
+        msg['To'] = ", ".join(EMAIL_RECIPIENTS)
+        
+        # Criar conteúdo HTML
+        html_content = create_email_html(releases, results)
+        html_part = MIMEText(html_content, 'html', 'utf-8')
+        msg.attach(html_part)
+        
+        # Enviar email
+        with smtplib.SMTP(EMAIL_SMTP_HOST, EMAIL_SMTP_PORT) as server:
+            server.starttls()
+            server.login(EMAIL_USER, EMAIL_PASSWORD)
+            server.send_message(msg)
+        
+        logger.info(f"Email sent successfully to {', '.join(EMAIL_RECIPIENTS)}")
+        return True
+        
+    except Exception as e:
+        logger.error(f"Failed to send email: {e}", exc_info=True)
+        return False
+
+
 def main():
     """Função principal: verifica calendário e atualiza datasets necessários."""
     logger.info("=" * 70)
@@ -260,8 +398,10 @@ def main():
     logger.info("Fetching calendar for this week...")
     releases = get_releases_this_week()
     
+    # Enviar email mesmo se não houver releases (para informar)
     if not releases:
         logger.info("No releases detected for this week. Nothing to update.")
+        send_calendar_email({}, None)  # Enviar email informando que não há releases
         return
     
     logger.info(f"Found releases for {len(releases)} datasets:")
@@ -300,6 +440,11 @@ def main():
         }, f, indent=2, ensure_ascii=False)
     
     logger.info(f"\nResults saved to: {results_file}")
+    
+    # Enviar email com resumo
+    logger.info("")
+    logger.info("Sending calendar email...")
+    send_calendar_email(releases, results)
 
 
 if __name__ == '__main__':

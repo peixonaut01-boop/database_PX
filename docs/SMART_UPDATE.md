@@ -79,10 +79,29 @@ Para cada dataset detectado no calendário:
 ## Configuração
 
 ### GitHub Secrets
+
+**Firebase:**
 ```
 FIREBASE_CREDENTIALS = <JSON>
 FIREBASE_DATABASE_URL = https://peixonaut01-2e0ba-default-rtdb.firebaseio.com/
 ```
+
+**Email (para receber calendário semanal):**
+```
+EMAIL_FROM = noreply@peixonaut.com (ou seu email)
+EMAIL_SMTP_HOST = smtp.gmail.com (ou seu servidor SMTP)
+EMAIL_SMTP_PORT = 587
+EMAIL_USER = seu-email@gmail.com
+EMAIL_PASSWORD = sua-senha-de-app (para Gmail, use App Password)
+```
+
+**Nota para Gmail:**
+1. Ative a verificação em 2 etapas
+2. Gere uma "Senha de app" em: https://myaccount.google.com/apppasswords
+3. Use essa senha no `EMAIL_PASSWORD`
+
+**Destinatários:**
+O email é enviado para: `lucasgmartins04@gmail.com` (configurado no código)
 
 ### Execução Manual
 Você pode executar manualmente a qualquer momento:
@@ -100,14 +119,25 @@ Com priorização (nacionais primeiro):
 
 **Nota**: Dados nacionais são atualizados primeiro e ficam disponíveis mais rápido!
 
+## Email Semanal
+
+Toda segunda-feira, você receberá um email com:
+
+✅ **Calendário da semana** - Todas as divulgações agendadas  
+✅ **Status de atualização** - Quais datasets foram atualizados com sucesso  
+✅ **Resumo estatístico** - Total de eventos e datasets  
+✅ **Design responsivo** - Visualização clara e organizada  
+
+O email é enviado mesmo quando não há divulgações (para informar que não há atualizações na semana).
+
 ## Próximos Passos
 
-- [ ] Adicionar notificações quando atualização completar
+- [x] Adicionar notificações por email quando atualização completar
 - [ ] Dashboard de status das atualizações
 - [ ] Métricas de tempo de atualização
 - [ ] Alertas para falhas críticas
 
 ---
 
-**Resultado**: Sistema que atualiza automaticamente baseado no calendário oficial do IBGE! 📅
+**Resultado**: Sistema que atualiza automaticamente baseado no calendário oficial do IBGE e envia email semanal! 📅📧
 
