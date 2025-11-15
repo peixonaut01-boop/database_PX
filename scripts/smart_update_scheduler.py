@@ -172,7 +172,7 @@ def filter_national_series(catalog: List[Dict], dataset: str) -> Tuple[List[Dict
     return national, regional
 
 
-def update_dataset_prioritized(dataset: str, national_first: bool = True, workers: int = 10) -> bool:
+def update_dataset_prioritized(dataset: str, national_first: bool = True, workers: int = 10) -> Tuple[bool, Dict]:
     """
     Atualiza dataset priorizando séries nacionais.
     Usa processamento paralelo para velocidade.
@@ -283,14 +283,23 @@ def update_dataset_prioritized(dataset: str, national_first: bool = True, worker
                 }, f, indent=2, ensure_ascii=False)
             logger.warning(f"  Failed records saved to: {failed_file}")
         
-        return total_failed == 0
+        stats = {
+            'total': len(national) + len(regional),
+            'national': len(national),
+            'regional': len(regional),
+            'updated': total_updated,
+            'failed': total_failed,
+            'failed_records': failed_records
+        }
+        
+        return total_failed == 0, stats
         
     except Exception as e:
         logger.error(f"Error updating dataset {dataset}: {e}", exc_info=True)
-        return False
+        return False, {'total': 0, 'national': 0, 'regional': 0, 'updated': 0, 'failed': 0, 'failed_records': []}
 
 
-def create_email_html(releases: Dict[str, List[Dict]], results: Optional[Dict[str, bool]] = None) -> str:
+def create_email_html(releases: Dict[str, List[Dict]], results: Optional[Dict[str, bool]] = None, stats: Optional[Dict[str, Dict]] = None) -> str:
     """Cria template HTML para o email do calendário."""
     today = datetime.now()
     week_start = today - timedelta(days=today.weekday())
@@ -344,6 +353,20 @@ def create_email_html(releases: Dict[str, List[Dict]], results: Optional[Dict[st
                     <h3>{dataset.upper()} {status_html}</h3>
         """
         
+        # Adicionar estatísticas se disponíveis
+        if stats and dataset in stats:
+            ds_stats = stats[dataset]
+            html += f"""
+                    <div style="margin: 10px 0; padding: 10px; background: #e8f4f8; border-radius: 5px;">
+                        <strong>📊 Estatísticas da Atualização:</strong><br>
+                        • Total de séries: {ds_stats.get('total', 0)}<br>
+                        • Séries nacionais: {ds_stats.get('national', 0)}<br>
+                        • Séries regionais: {ds_stats.get('regional', 0)}<br>
+                        • Atualizadas com sucesso: <strong style="color: #28a745;">{ds_stats.get('updated', 0)}</strong><br>
+                        • Falhas: <strong style="color: #dc3545;">{ds_stats.get('failed', 0)}</strong>
+                    </div>
+            """
+        
         for event in events:
             titulo = event.get('titulo', 'N/A')
             data = event.get('data_divulgacao', 'N/A')
@@ -384,7 +407,7 @@ def create_email_html(releases: Dict[str, List[Dict]], results: Optional[Dict[st
     return html
 
 
-def send_calendar_email(releases: Dict[str, List[Dict]], results: Optional[Dict[str, bool]] = None) -> bool:
+def send_calendar_email(releases: Dict[str, List[Dict]], results: Optional[Dict[str, bool]] = None, stats: Optional[Dict[str, Dict]] = None) -> bool:
     """Envia email com o calendário de atualizações."""
     if not EMAIL_USER or not EMAIL_PASSWORD:
         logger.warning("Email credentials not configured. Skipping email send.")
@@ -393,12 +416,16 @@ def send_calendar_email(releases: Dict[str, List[Dict]], results: Optional[Dict[
     try:
         # Criar mensagem
         msg = MIMEMultipart('alternative')
-        msg['Subject'] = f"📅 Calendário IBGE - Semana {datetime.now().strftime('%d/%m/%Y')}"
+        # Assunto do email: indicar que é email de conclusão
+        if results and any(results.values()):
+            msg['Subject'] = f"✅ Atualização IBGE Concluída - {datetime.now().strftime('%d/%m/%Y')}"
+        else:
+            msg['Subject'] = f"📅 Calendário IBGE - Semana {datetime.now().strftime('%d/%m/%Y')}"
         msg['From'] = EMAIL_FROM
         msg['To'] = ", ".join(EMAIL_RECIPIENTS)
         
         # Criar conteúdo HTML
-        html_content = create_email_html(releases, results)
+        html_content = create_email_html(releases, results, stats)
         html_part = MIMEText(html_content, 'html', 'utf-8')
         msg.attach(html_part)
         
@@ -444,9 +471,11 @@ def main():
     
     # Atualizar cada dataset detectado (com priorização nacional)
     results = {}
+    stats = {}
     for dataset in releases.keys():
-        success = update_dataset_prioritized(dataset, national_first=True, workers=10)
+        success, dataset_stats = update_dataset_prioritized(dataset, national_first=True, workers=10)
         results[dataset] = success
+        stats[dataset] = dataset_stats
     
     # Resumo
     logger.info("")
@@ -469,10 +498,10 @@ def main():
     
     logger.info(f"\nResults saved to: {results_file}")
     
-    # Enviar email com resumo
+    # Enviar email com resumo completo
     logger.info("")
-    logger.info("Sending calendar email...")
-    send_calendar_email(releases, results)
+    logger.info("Sending completion email with update statistics...")
+    send_calendar_email(releases, results, stats)
 
 
 if __name__ == '__main__':
